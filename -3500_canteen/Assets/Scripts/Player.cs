@@ -120,59 +120,19 @@ public class Player : MonoBehaviour, IKithenObjectParent
 
     private void HandleMovement()
     {
-        Vector2 inputVector = gameInput.GetMovementVectorNormalized();
-
-        Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-
-        float playerRadius = .7f;
-        float playerHeight = 2f;
-        float moveDistance = speed * Time.deltaTime;
-        canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
-
-        if (!canMove)
+        Camera mainCamera = Camera.main;
+        if (mainCamera == null)
         {
-            // Can't move on movDir
-
-
-            //Movement only on X 
-            Vector3 movDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
-            canMove = (moveDir.x < -.5f || moveDir.x > +.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movDirX, moveDistance);
-
-            if (canMove)
-            {
-                moveDir = movDirX;
-            }
-            else
-            {
-
-                // Can't move 
-
-                //Movement only on Z
-                Vector3 movDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
-                canMove = (moveDir.z < -.5f || moveDir.z > +.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movDirZ, moveDistance);
-
-                if (canMove)
-                {
-                    moveDir = movDirZ;
-                }
-                else
-                {
-                    //Can't movee
-                }
-            }
-
+            Debug.LogError("主相机未找到！");
+            return;
         }
 
-        if (canMove)
+        Ray Mouse = mainCamera.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(Mouse, out RaycastHit hitInfo))
         {
-            transform.position += moveDir * moveDistance;
+            // 将角色的位置设置为鼠标点击的位置
+            transform.position = hitInfo.point;
         }
-
-        float rotateSpeed = 10f;
-
-        isWalking = moveDir != Vector3.zero;
-
-        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
     }
 
     private void SetSelectedCounter(BaseCounter selectedCounter)
