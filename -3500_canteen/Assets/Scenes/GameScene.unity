@@ -9158,6 +9158,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: CuttingCounter (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4525924881615339676, guid: 04062867509c7de47959b40b284a3009, type: 3}
+      propertyPath: cutKitchenObjectOSArray.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4525924881615339676, guid: 04062867509c7de47959b40b284a3009, type: 3}
+      propertyPath: cutKitchenObjectOSArray.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 0558f57690167684d86a8e57e5584fa8, type: 2}
     - target: {fileID: 7213227811145820339, guid: 04062867509c7de47959b40b284a3009, type: 3}
       propertyPath: m_RootOrder
       value: 12
