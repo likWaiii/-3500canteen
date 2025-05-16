@@ -40,6 +40,7 @@ public class SStoveCounter : BaseCounter,IHasProgress{
 
     private void Update() {
         if (HasKitchenObject()) {
+            Debug.LogWarning("1£¡");
             switch (state) {
 
                 case State.Idle:
