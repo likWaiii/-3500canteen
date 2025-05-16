@@ -10130,6 +10130,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ContainerCounter_Tomato
       objectReference: {fileID: 0}
+    - target: {fileID: 3828014733394782697, guid: a8171a2db9e6c6940affb6fa8df04b52, type: 3}
+      propertyPath: kitchenObjectOS
+      value: 
+      objectReference: {fileID: 11400000, guid: 921d903e040e6024282c18c128181185, type: 2}
     - target: {fileID: 4959933211641534342, guid: a8171a2db9e6c6940affb6fa8df04b52, type: 3}
       propertyPath: m_RootOrder
       value: 7
