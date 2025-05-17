@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class FryingReciepeSO : ScriptableObject
+public class Frying2ReciepeSO : ScriptableObject
 {
     public KitchenObjectOS input;
     public KitchenObjectOS output;
+
     public float fryingTimerMax;
 
 
