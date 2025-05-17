@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   kitchenObjectsOSList:
   - {fileID: 11400000, guid: 92b7b3ee2763f0740a2babf7ddda49d7, type: 2}
-  - {fileID: 11400000, guid: 9351b1e6c7374b04cb4209fb1a53d775, type: 2}
+  - {fileID: 11400000, guid: 377695d6ef12729478b7034f5c9f4a18, type: 2}
+  - {fileID: 11400000, guid: c13f798db0a262e4a8db49a8d3307b21, type: 2}
   recipeName: "\u6C99\u62C9"
