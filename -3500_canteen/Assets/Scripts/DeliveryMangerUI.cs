@@ -1,42 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+public class DeliveryManagerUI : MonoBehaviour
+{
+    [SerializeField] private List<DeliveryManagerSingleUI> slotUIs;
 
-public class DeliveryMangerUI : MonoBehaviour {
-
-    [SerializeField] private Transform container;
-    [SerializeField] private Transform recipeTemplate;
-
-
-    private void Awake() {
-        recipeTemplate.gameObject.SetActive(false);
-    }
-
-    private void Start() {
-        DeliveryManager.Instance.OnRecipeSpawned += DeliveryManger_OnRecipeSpawned;
-        DeliveryManager.Instance.OnRecipeComplete += DeliveryManger_OnRecipeComplete;
+    private void Start()
+    {
+        DeliveryManager.Instance.OnRecipeSpawned += OnRecipeChanged;
+        DeliveryManager.Instance.OnRecipeComplete += OnRecipeChanged;
+        DeliveryManager.Instance.OnRecipeFailed += OnRecipeChanged;
 
         UpdateVisual();
     }
-
-    private void DeliveryManger_OnRecipeComplete(object sender, System.EventArgs e) {
+    private void OnRecipeChanged(object sender, EventArgs e)
+    {
         UpdateVisual();
     }
+    private void UpdateVisual()
+    {
+        List<WaitingRecipe> waitingRecipes = DeliveryManager.Instance.GetWaitingRecipeList();
 
-    private void DeliveryManger_OnRecipeSpawned(object sender, System.EventArgs e) {
-        UpdateVisual();
-    }
-
-    private void UpdateVisual() {
-        foreach(Transform child in container) {
-            if (child == recipeTemplate) continue;
-            Destroy(child.gameObject);
-        }
-
-        foreach (RecipeSO recipeSO in DeliveryManager.Instance.GetWaitingRecipeSOList()) {
-            Transform recipeTransform = Instantiate(recipeTemplate, container);
-            recipeTransform.gameObject.SetActive(true); 
-            recipeTransform.GetComponent<DeliveryMangerSingleUI>().SetRecipeSO(recipeSO);
+        for (int i = 0; i < slotUIs.Count; i++)
+        {
+            if (i < waitingRecipes.Count && waitingRecipes[i] != null)
+            {
+                slotUIs[i].SetWaitingRecipe(waitingRecipes[i]);
+            }
+            else
+            {
+                slotUIs[i].ClearUI();  // 没有订单的槽位清空内容
+            }
         }
     }
 }
