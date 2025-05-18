@@ -5,45 +5,58 @@ using UnityEngine.UI;
 
 public class PProgressBarUI : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject hasProgressGameObject;
 
-    [SerializeField] private GameObject hasProgressGameObject;
-    [SerializeField] private Image barImage;
+    [SerializeField]
+    private Image barImage;
 
     private IHasProgress hasProgress;
 
-    private void Start() {
-
+    private void Start()
+    {
         hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
 
-        if(hasProgress == null ) {
-            Debug.LogError("Game Object " + hasProgressGameObject + "does not have a component that implements IHasProgress!");
+        if (hasProgress == null)
+        {
+            Debug.LogError(
+                "Game Object "
+                    + hasProgressGameObject
+                    + "does not have a component that implements IHasProgress!"
+            );
         }
 
         hasProgress.OnProgressChanged += HasProgress_OnProgressChanged;
 
-        barImage.fillAmount= 0f;
+        barImage.fillAmount = 0f;
 
         Hide();
     }
 
-    private void HasProgress_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e) {
-        barImage.fillAmount= e.progressNormalized;
+    private void HasProgress_OnProgressChanged(
+        object sender,
+        IHasProgress.OnProgressChangedEventArgs e
+    )
+    {
+        barImage.fillAmount = e.progressNormalized;
 
-        if(e.progressNormalized == 0f || e.progressNormalized == 1f) {
+        if (e.progressNormalized == 0f || e.progressNormalized == 1f)
+        {
             Hide();
         }
-        else {
+        else
+        {
             Show();
         }
     }
 
-    private void Show() {
+    private void Show()
+    {
         gameObject.SetActive(true);
-
     }
 
-    private void Hide() {
+    private void Hide()
+    {
         gameObject.SetActive(false);
-
     }
 }

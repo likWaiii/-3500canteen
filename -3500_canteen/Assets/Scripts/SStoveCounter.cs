@@ -1,22 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.EventSystems;
 using static CuttingCounter;
 
-public class SStoveCounter : BaseCounter,IHasProgress{
-
+public class SStoveCounter : BaseCounter, IHasProgress
+{
     public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
 
-    public class OnStateChangedEventArgs : EventArgs {
+    public class OnStateChangedEventArgs : EventArgs
+    {
         public State state;
     }
 
-
-    public enum State {
+    public enum State
+    {
         Idle,
         Frying1,
         Frying2,
@@ -26,21 +27,29 @@ public class SStoveCounter : BaseCounter,IHasProgress{
 
     private State state;
 
-    [SerializeField] private FryingReciepeSO[] fryingReciepeSOArray;
-    [SerializeField] private BurningReciepeSO[] burningReciepeSOArray;
-    [SerializeField] private Frying2ReciepeSO[] Frying2ReciepeSOArray;
+    [SerializeField]
+    private FryingReciepeSO[] fryingReciepeSOArray;
+
+    [SerializeField]
+    private BurningReciepeSO[] burningReciepeSOArray;
+
+    [SerializeField]
+    private Frying2ReciepeSO[] Frying2ReciepeSOArray;
     private float fryingTimer;
     private float burnedTimer;
     private float frying2Timer = 0f;
     private FryingReciepeSO fryingReciepeSO;
     private BurningReciepeSO burningReciepeSO;
     private Frying2ReciepeSO frying2ReciepeSO;
+
     // 需要添加的新字段
-    
-    
-    private void Start() {
+
+
+    private void Start()
+    {
         state = State.Idle;
     }
+
     private bool HasTurned = false; // 用于记录是否已经翻过面
 
     private void Update()
@@ -50,17 +59,19 @@ public class SStoveCounter : BaseCounter,IHasProgress{
             Debug.LogWarning("1！");
             switch (state)
             {
-
                 case State.Idle:
                     break;
 
                 case State.Frying1:
                     fryingTimer += Time.deltaTime;
 
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = fryingTimer / fryingReciepeSO.fryingTimerMax
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = fryingTimer / fryingReciepeSO.fryingTimerMax,
+                        }
+                    );
 
                     if (fryingTimer > fryingReciepeSO.fryingTimerMax)
                     {
@@ -69,22 +80,24 @@ public class SStoveCounter : BaseCounter,IHasProgress{
                         KitchenObject.SpwanKitchenObject(fryingReciepeSO.output, this);
                         state = State.Fried;
                         burnedTimer = 0f;
-                        burningReciepeSO = GetBurningSOWithInput(GetKitchenObject().GetKitchenObjectOS());
+                        burningReciepeSO = GetBurningSOWithInput(
+                            GetKitchenObject().GetKitchenObjectOS()
+                        );
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                        {
-                            state = state
-                        });
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
                     }
                     break;
 
                 case State.Frying2:
                     frying2Timer += Time.deltaTime;
 
-                    OnProgressChanged?.Invoke(this, e: new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = frying2Timer / frying2ReciepeSO.fryingTimerMax
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        e: new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = frying2Timer / frying2ReciepeSO.fryingTimerMax,
+                        }
+                    );
 
                     if (frying2Timer > frying2ReciepeSO.fryingTimerMax)
                     {
@@ -93,12 +106,11 @@ public class SStoveCounter : BaseCounter,IHasProgress{
                         KitchenObject.SpwanKitchenObject(frying2ReciepeSO.output, this);
                         state = State.Fried;
                         burnedTimer = 0f;
-                        burningReciepeSO = GetBurningSOWithInput(GetKitchenObject().GetKitchenObjectOS());
+                        burningReciepeSO = GetBurningSOWithInput(
+                            GetKitchenObject().GetKitchenObjectOS()
+                        );
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                        {
-                            state = state
-                        });
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
                     }
                     break;
 
@@ -125,15 +137,18 @@ public class SStoveCounter : BaseCounter,IHasProgress{
 
                                 state = State.Frying2;
 
-                                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                                {
-                                    state = state
-                                });
+                                OnStateChanged?.Invoke(
+                                    this,
+                                    new OnStateChangedEventArgs { state = state }
+                                );
 
-                                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                                {
-                                    progressNormalized = 0f
-                                });
+                                OnProgressChanged?.Invoke(
+                                    this,
+                                    new IHasProgress.OnProgressChangedEventArgs
+                                    {
+                                        progressNormalized = 0f,
+                                    }
+                                );
 
                                 Debug.Log("食物已翻面，进入Frying2状态");
                             }
@@ -146,10 +161,13 @@ public class SStoveCounter : BaseCounter,IHasProgress{
 
                     burnedTimer += Time.deltaTime;
 
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = burnedTimer / burningReciepeSO.burningTimerMax
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = burnedTimer / burningReciepeSO.burningTimerMax,
+                        }
+                    );
 
                     if (burnedTimer > burningReciepeSO.burningTimerMax)
                     {
@@ -158,15 +176,12 @@ public class SStoveCounter : BaseCounter,IHasProgress{
                         KitchenObject.SpwanKitchenObject(burningReciepeSO.output, this);
                         state = State.Burned;
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                        {
-                            state = state
-                        });
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                        {
-                            progressNormalized = 0f
-                        });
+                        OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f }
+                        );
                     }
                     break;
 
@@ -176,15 +191,17 @@ public class SStoveCounter : BaseCounter,IHasProgress{
         }
     }
 
-
-    
-    public override void Interact(Player player) {
-        if (!HasKitchenObject()) {
+    public override void Interact(Player player)
+    {
+        if (!HasKitchenObject())
+        {
             //Theree is no KitchenObject
-            if (player.HasKitchenObject()) {
+            if (player.HasKitchenObject())
+            {
                 //Player is Carrying Something
 
-                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectOS())) {
+                if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectOS()))
+                {
                     //player carring something that can be fried
                     player.GetKitchenObject().SetKitchenObjectParent(this);
 
@@ -193,83 +210,87 @@ public class SStoveCounter : BaseCounter,IHasProgress{
                     state = State.Frying1;
                     fryingTimer = 0f;
 
-                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs {
-                        state = state
+                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                    });
-
-                    OnProgressChanged?.Invoke(this,new IHasProgress.OnProgressChangedEventArgs{
-                        progressNormalized = fryingTimer / fryingReciepeSO.fryingTimerMax
-
-                    });
-
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = fryingTimer / fryingReciepeSO.fryingTimerMax,
+                        }
+                    );
                 }
             }
-            else {
+            else
+            {
                 //Payer not carring nothing
             }
         }
-        else {
+        else
+        {
             //Theree is a KitchenObject
-            if (player.HasKitchenObject()) {
+            if (player.HasKitchenObject())
+            {
                 //Player is carring something
-                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
+                if (
+                    player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)
+                )
+                {
                     //Player is holding a plate
-                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectOS())) {
+                    if (
+                        plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectOS())
+                    )
+                    {
                         GetKitchenObject().DestroySelf();
 
                         state = State.Idle;
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs {
-                            state = state
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                        });
-
-                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
-                            progressNormalized = 0f
-
-                        });
+                        OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f }
+                        );
                     }
                 }
             }
-            else {
+            else
+            {
                 //Player is not carring something
                 GetKitchenObject().SetKitchenObjectParent(player);
 
                 state = State.Idle;
 
-                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs {
-                    state = state
+                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                });
-
-                OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
-                    progressNormalized = 0f
-
-                });
+                OnProgressChanged?.Invoke(
+                    this,
+                    new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f }
+                );
             }
         }
     }
 
-
-    private bool HasRecipeWithInput(KitchenObjectOS inputKitchenObjectOS) {
-
+    private bool HasRecipeWithInput(KitchenObjectOS inputKitchenObjectOS)
+    {
         FryingReciepeSO fryingReciepeSO = GetFryingSOWithInput(inputKitchenObjectOS);
         return fryingReciepeSO != null;
-
     }
 
-
-    private KitchenObjectOS GetOutputForInput(KitchenObjectOS inputKitchenObjectOS) {
+    private KitchenObjectOS GetOutputForInput(KitchenObjectOS inputKitchenObjectOS)
+    {
         FryingReciepeSO fryingReciepeSO = GetFryingSOWithInput(inputKitchenObjectOS);
         fryingReciepeSO = GetFryingSOWithInput(inputKitchenObjectOS);
-        if (fryingReciepeSO != null) {
+        if (fryingReciepeSO != null)
+        {
             return fryingReciepeSO.output;
         }
-        else {
+        else
+        {
             return null;
         }
     }
+
     private KitchenObjectOS GetOutputForInput2(KitchenObjectOS inputKitchenObjectOS)
     {
         FryingReciepeSO fryingReciepeSO = GetFrying2SOWithInput(inputKitchenObjectOS);
@@ -283,6 +304,7 @@ public class SStoveCounter : BaseCounter,IHasProgress{
             return null;
         }
     }
+
     private Frying2ReciepeSO GetFrying2ReciepeSOWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         foreach (Frying2ReciepeSO frying2RecipeSO in Frying2ReciepeSOArray)
@@ -295,15 +317,20 @@ public class SStoveCounter : BaseCounter,IHasProgress{
 
         return null;
     }
-    private FryingReciepeSO GetFryingSOWithInput(KitchenObjectOS inputKitchenObjectOS) {
-        foreach (FryingReciepeSO fryingRecipeSO in fryingReciepeSOArray) {
-            if (fryingRecipeSO.input == inputKitchenObjectOS) {
+
+    private FryingReciepeSO GetFryingSOWithInput(KitchenObjectOS inputKitchenObjectOS)
+    {
+        foreach (FryingReciepeSO fryingRecipeSO in fryingReciepeSOArray)
+        {
+            if (fryingRecipeSO.input == inputKitchenObjectOS)
+            {
                 return fryingRecipeSO;
             }
         }
 
         return null;
     }
+
     private FryingReciepeSO GetFrying2SOWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         foreach (FryingReciepeSO fryingRecipeSO in fryingReciepeSOArray)
@@ -317,9 +344,12 @@ public class SStoveCounter : BaseCounter,IHasProgress{
         return null;
     }
 
-    private BurningReciepeSO GetBurningSOWithInput(KitchenObjectOS inputKitchenObjectOS) {
-        foreach (BurningReciepeSO burningRecipeSO in burningReciepeSOArray) {
-            if (burningRecipeSO.input == inputKitchenObjectOS) {
+    private BurningReciepeSO GetBurningSOWithInput(KitchenObjectOS inputKitchenObjectOS)
+    {
+        foreach (BurningReciepeSO burningRecipeSO in burningReciepeSOArray)
+        {
+            if (burningRecipeSO.input == inputKitchenObjectOS)
+            {
                 return burningRecipeSO;
             }
         }
@@ -327,7 +357,8 @@ public class SStoveCounter : BaseCounter,IHasProgress{
         return null;
     }
 
-    public bool IsFried() {
+    public bool IsFried()
+    {
         return state == State.Fried;
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu()]
 public class RecipeSO : ScriptableObject
 {
-
     public List<KitchenObjectOS> kitchenObjectsOSList;
     public string recipeName;
 
@@ -13,7 +12,7 @@ public class RecipeSO : ScriptableObject
     public float maxTime = 30f;
 
     // ✅ 新增：顾客状态图
-    public Sprite calmSprite;   // 等待状态
-    public Sprite happySprite;  // 完成状态
-    public Sprite angrySprite;  // 超时失败状态
+    public Sprite calmSprite; // 等待状态
+    public Sprite happySprite; // 完成状态
+    public Sprite angrySprite; // 超时失败状态
 }

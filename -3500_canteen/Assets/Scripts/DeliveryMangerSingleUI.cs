@@ -6,13 +6,21 @@ using UnityEngine.UI;
 
 public class DeliveryManagerSingleUI : MonoBehaviour
 {
+    [SerializeField]
+    private TextMeshProUGUI recipeNameText;
 
-    [SerializeField] private TextMeshProUGUI recipeNameText;
-    [SerializeField] private Transform iconContainer;
-    [SerializeField] private Transform iconTemplate;
+    [SerializeField]
+    private Transform iconContainer;
+
+    [SerializeField]
+    private Transform iconTemplate;
+
     //新增进度条和顾客状态图
-    [SerializeField] private Slider timeSlider;
-    [SerializeField] private Image customerImage;
+    [SerializeField]
+    private Slider timeSlider;
+
+    [SerializeField]
+    private Image customerImage;
     private WaitingRecipe currentWaitingRecipe;
 
     private void Awake()
@@ -36,12 +44,16 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         // 清除旧图标
         foreach (Transform child in iconContainer)
         {
-            if (child == iconTemplate) continue;
+            if (child == iconTemplate)
+                continue;
             Destroy(child.gameObject);
         }
 
         // ✅ 按对象引用统计提交数量
-        Dictionary<KitchenObjectOS, int> remainingSubmission = new Dictionary<KitchenObjectOS, int>(waitingRecipe.submittedDict, new KitchenObjectOSComparer());
+        Dictionary<KitchenObjectOS, int> remainingSubmission = new Dictionary<KitchenObjectOS, int>(
+            waitingRecipe.submittedDict,
+            new KitchenObjectOSComparer()
+        );
 
         // ✅ 从左到右生成图标
         foreach (KitchenObjectOS kitchenObjectOS in recipeSO.kitchenObjectsOSList)
@@ -53,7 +65,10 @@ public class DeliveryManagerSingleUI : MonoBehaviour
             iconImage.sprite = kitchenObjectOS.sprite;
 
             // ✅ 判断是否还有未消耗的提交数量
-            if (remainingSubmission.ContainsKey(kitchenObjectOS) && remainingSubmission[kitchenObjectOS] > 0)
+            if (
+                remainingSubmission.ContainsKey(kitchenObjectOS)
+                && remainingSubmission[kitchenObjectOS] > 0
+            )
             {
                 iconImage.color = Color.gray;
                 remainingSubmission[kitchenObjectOS]--; // 消耗一次
@@ -68,13 +83,13 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         customerImage.sprite = recipeSO.calmSprite;
     }
 
-
     public void ClearUI()
     {
         recipeNameText.text = "";
         foreach (Transform child in iconContainer)
         {
-            if (child == iconTemplate) continue;
+            if (child == iconTemplate)
+                continue;
             Destroy(child.gameObject);
         }
 
@@ -85,7 +100,8 @@ public class DeliveryManagerSingleUI : MonoBehaviour
 
     private void Update()
     {
-        if (currentWaitingRecipe == null) return;
+        if (currentWaitingRecipe == null)
+            return;
 
         // ✅ 更新时间进度条
         float remaining = currentWaitingRecipe.remainingTime;
@@ -102,6 +118,4 @@ public class DeliveryManagerSingleUI : MonoBehaviour
             customerImage.sprite = currentWaitingRecipe.recipeSO.angrySprite;
         }
     }
-
-
 }

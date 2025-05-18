@@ -9,7 +9,4 @@ public class CuttingReciepeSO : ScriptableObject
     public KitchenObjectOS output;
 
     public int cuttingPogressMax;
-
-
-
 }

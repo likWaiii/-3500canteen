@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKithenObjectParent
 {
-
     public static Player Instance { get; private set; }
 
     public event EventHandler OnPickedSomething;
@@ -17,11 +16,17 @@ public class Player : MonoBehaviour, IKithenObjectParent
         public BaseCounter selectedCounter;
     }
 
+    [SerializeField]
+    private float speed = 7f;
 
-    [SerializeField] private float speed = 7f;
-    [SerializeField] private GameInput gameInput;
-    [SerializeField] private LayerMask counterLayerMask;
-    [SerializeField] private Transform kitchenObjectHoldPoint;
+    [SerializeField]
+    private GameInput gameInput;
+
+    [SerializeField]
+    private LayerMask counterLayerMask;
+
+    [SerializeField]
+    private Transform kitchenObjectHoldPoint;
 
     private bool isWalking;
     private bool canMove;
@@ -29,9 +34,9 @@ public class Player : MonoBehaviour, IKithenObjectParent
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
 
+    
     private void Awake()
     {
-
         if (Instance != null)
         {
             Debug.LogError("Something Went Wrong there are more than one player");
@@ -47,7 +52,8 @@ public class Player : MonoBehaviour, IKithenObjectParent
 
     private void GameInput_OnInteractAlternateActions(object sender, EventArgs e)
     {
-        if (!KitchenGameManager.Instance.IsGamePlaying()) return;
+        if (!KitchenGameManager.Instance.IsGamePlaying())
+            return;
         if (selectedCounter != null)
         {
             selectedCounter.InteractAlternate(this);
@@ -56,7 +62,8 @@ public class Player : MonoBehaviour, IKithenObjectParent
 
     private void GameInput_OnInteractActions(object sender, System.EventArgs e)
     {
-        if (!KitchenGameManager.Instance.IsGamePlaying()) return;
+        if (!KitchenGameManager.Instance.IsGamePlaying())
+            return;
         if (selectedCounter != null)
         {
             selectedCounter.Interact(this);
@@ -67,7 +74,6 @@ public class Player : MonoBehaviour, IKithenObjectParent
     {
         HandleMovement();
         HandleInteractions();
-
     }
 
     public bool IsWalking()
@@ -93,7 +99,6 @@ public class Player : MonoBehaviour, IKithenObjectParent
         // 进行射线检测
         if (Physics.Raycast(ray, out RaycastHit raycastHit, interactDis, counterLayerMask))
         {
-           
             // 尝试获取击中物体的BaseCounter组件
             if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter))
             {
@@ -114,7 +119,7 @@ public class Player : MonoBehaviour, IKithenObjectParent
         {
             // 射线未击中任何物体，设置为null
             SetSelectedCounter(null);
-            Debug.LogWarning("射线未击中任何物体！");
+            // Debug.LogWarning("射线未击中任何物体！");
         }
     }
 
@@ -139,14 +144,13 @@ public class Player : MonoBehaviour, IKithenObjectParent
     {
         this.selectedCounter = selectedCounter;
 
-        OnSelectedCounterChanged?.Invoke(this, new OnSelectedCounterChangedEventArgs
-        {
-            selectedCounter = selectedCounter
-        });
-
+        OnSelectedCounterChanged?.Invoke(
+            this,
+            new OnSelectedCounterChangedEventArgs { selectedCounter = selectedCounter }
+        );
     }
 
-    // Interfaces functions 
+    // Interfaces functions
     public Transform GetKitchenObjectFollowTransform()
     {
         return kitchenObjectHoldPoint;
@@ -176,6 +180,4 @@ public class Player : MonoBehaviour, IKithenObjectParent
     {
         return kitchenObject != null;
     }
-
-
 }

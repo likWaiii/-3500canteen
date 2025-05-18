@@ -8,13 +8,26 @@ public class DeliveryResultUI : MonoBehaviour
 {
     private const string POPUP = "Popup";
 
-    [SerializeField] private Image backgroundImage;
-    [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI messageText;
-    [SerializeField] private Color successColor;
-    [SerializeField] private Color failedColor;
-    [SerializeField] private Sprite sucessSprite;
-    [SerializeField] private Sprite failedSprite;
+    [SerializeField]
+    private Image backgroundImage;
+
+    [SerializeField]
+    private Image iconImage;
+
+    [SerializeField]
+    private TextMeshProUGUI messageText;
+
+    [SerializeField]
+    private Color successColor;
+
+    [SerializeField]
+    private Color failedColor;
+
+    [SerializeField]
+    private Sprite sucessSprite;
+
+    [SerializeField]
+    private Sprite failedSprite;
 
     private Animator animator;
 
