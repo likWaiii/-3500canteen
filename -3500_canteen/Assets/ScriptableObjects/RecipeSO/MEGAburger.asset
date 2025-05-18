@@ -19,3 +19,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 92b7b3ee2763f0740a2babf7ddda49d7, type: 2}
   - {fileID: 11400000, guid: 9351b1e6c7374b04cb4209fb1a53d775, type: 2}
   recipeName: "\u5DE8\u65E0\u9738\u6C49\u5821"
+  maxTime: 30
+  calmSprite: {fileID: 21300000, guid: f51045a25148c09479e9f353f88423c1, type: 3}
+  happySprite: {fileID: 21300000, guid: a90b6ae14e5adbc46886275486cdc850, type: 3}
+  angrySprite: {fileID: 21300000, guid: be240d5c3ea232c4c8a4bdac3705a1b8, type: 3}
