@@ -15,3 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 5875697587690727071, guid: 9c535b01147a4fc4c9cd985666738c9a, type: 3}
   sprite: {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
   objectName: Maffin
+  value: 2
