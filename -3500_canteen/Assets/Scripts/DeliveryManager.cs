@@ -20,7 +20,7 @@ public class DeliveryManager : MonoBehaviour
     private float spawnRecipeTimerMax = 4f;
     private int waitingRecipeMax = 4;
     private int successfulRecipesAmount;
-
+    private int totalEarnedValue = 0;
     private void Awake()
     {
         Instance = this;
@@ -47,27 +47,60 @@ public class DeliveryManager : MonoBehaviour
 
         RecipeSO recipeSO = wr.recipeSO;
 
-        if (!recipeSO.kitchenObjectsOSList.Contains(item))
+        // ✅ 统计该菜在订单中总共需要几份
+        int requiredCount = 0;
+        foreach (var obj in recipeSO.kitchenObjectsOSList)
         {
-            Debug.Log($"❌ 提交失败：订单 {slotIndex} 不需要 {item.name}");
+            if (obj.objectName == item.objectName) requiredCount++;
+        }
+
+        if (requiredCount == 0)
+        {
+            Debug.Log($"❌ 提交失败：订单 {slotIndex} 不需要 {item.objectName}");
             OnRecipeFailed?.Invoke(this, EventArgs.Empty);
             return;
         }
 
-        if (wr.submittedSet.Contains(item))
+        // ✅ 获取当前已经提交的数量
+        int submittedCount = 0;
+        wr.submittedDict.TryGetValue(item, out submittedCount);
+
+        if (submittedCount >= requiredCount)
         {
-            Debug.Log($"⚠️ 已经交过 {item.name}，不能重复提交");
+            Debug.Log($"⚠️ 已提交足够数量的 {item.objectName}，不能再交");
             return;
         }
 
-        wr.submittedSet.Add(item);
-        Debug.Log($"✅ 成功提交 {item.name} 给订单槽 {slotIndex}");
-
-        // 判断是否所有菜都交完
-        bool allSubmitted = true;
-        foreach (KitchenObjectOS required in recipeSO.kitchenObjectsOSList)
+        // ✅ 提交成功
+        if (wr.submittedDict.ContainsKey(item))
         {
-            if (!wr.submittedSet.Contains(required))
+            wr.submittedDict[item]++;
+        }
+        else
+        {
+            wr.submittedDict[item] = 1;
+        }
+
+        Debug.Log($"✅ 成功提交 {item.objectName} 给订单槽 {slotIndex}");
+
+        // ✅ 判断是否所有菜都已交完
+        bool allSubmitted = true;
+
+        Dictionary<KitchenObjectOS, int> requiredDict = new Dictionary<KitchenObjectOS, int>(new KitchenObjectOSComparer());
+
+        foreach (var obj in recipeSO.kitchenObjectsOSList)
+        {
+            if (requiredDict.ContainsKey(obj))
+                requiredDict[obj]++;
+            else
+                requiredDict[obj] = 1;
+        }
+
+        foreach (var kvp in requiredDict)
+        {
+            int already = 0;
+            wr.submittedDict.TryGetValue(kvp.Key, out already);
+            if (already < kvp.Value)
             {
                 allSubmitted = false;
                 break;
@@ -77,19 +110,27 @@ public class DeliveryManager : MonoBehaviour
         if (allSubmitted)
         {
             wr.isCompleted = true;
-            waitingRecipeList[slotIndex] = null;
+            StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
             successfulRecipesAmount++;
 
+            // ✅ 加分逻辑（加在这里）
+            int recipeValue = 0;
+            foreach (var obj in wr.recipeSO.kitchenObjectsOSList)
+            {
+                recipeValue += obj.value;
+            }
+            totalEarnedValue += recipeValue;
+
+            Debug.Log($"🎉 订单 {slotIndex} 完成！");
             OnRecipeComplete?.Invoke(this, EventArgs.Empty);
             OnRecipeSucess?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            // 只提交了其中一个菜，不触发完成事件，但可以手动刷新 UI
-            OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // 或定义一个 OnRecipeProgressUpdated
+            Debug.Log($"🔄 订单 {slotIndex} 进度更新");
+            OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
         }
     }
-
     private void Update()
     {
         spawnRecipeTimer -= Time.deltaTime;
@@ -199,5 +240,15 @@ public class DeliveryManager : MonoBehaviour
     public int GetSuccessfulRecipesAmount()
     {
         return successfulRecipesAmount;
+    }
+    public int GetTotalEarnedValue()
+    {
+        return totalEarnedValue;
+    }
+    private IEnumerator DelayRemoveCompletedOrder(int slotIndex, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        waitingRecipeList[slotIndex] = null;
+        OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // 强制刷新 UI 显示空槽
     }
 }

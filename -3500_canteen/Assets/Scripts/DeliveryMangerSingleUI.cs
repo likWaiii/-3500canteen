@@ -29,17 +29,21 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         int totalValue = 0;
         foreach (KitchenObjectOS kitchenObject in recipeSO.kitchenObjectsOSList)
         {
-            totalValue += 1; // or kitchenObject.value
+            totalValue += kitchenObject.value;
         }
-
         recipeNameText.text = "价值：" + totalValue;
 
+        // 清除旧图标
         foreach (Transform child in iconContainer)
         {
             if (child == iconTemplate) continue;
             Destroy(child.gameObject);
         }
 
+        // ✅ 按对象引用统计提交数量
+        Dictionary<KitchenObjectOS, int> remainingSubmission = new Dictionary<KitchenObjectOS, int>(waitingRecipe.submittedDict, new KitchenObjectOSComparer());
+
+        // ✅ 从左到右生成图标
         foreach (KitchenObjectOS kitchenObjectOS in recipeSO.kitchenObjectsOSList)
         {
             Transform iconTransform = Instantiate(iconTemplate, iconContainer);
@@ -48,10 +52,11 @@ public class DeliveryManagerSingleUI : MonoBehaviour
             Image iconImage = iconTransform.GetComponent<Image>();
             iconImage.sprite = kitchenObjectOS.sprite;
 
-            // ✅ 根据提交记录变灰
-            if (waitingRecipe.submittedSet.Contains(kitchenObjectOS))
+            // ✅ 判断是否还有未消耗的提交数量
+            if (remainingSubmission.ContainsKey(kitchenObjectOS) && remainingSubmission[kitchenObjectOS] > 0)
             {
                 iconImage.color = Color.gray;
+                remainingSubmission[kitchenObjectOS]--; // 消耗一次
             }
             else
             {
@@ -59,9 +64,10 @@ public class DeliveryManagerSingleUI : MonoBehaviour
             }
         }
 
-        // 顾客初始状态图像
+        // 初始表情
         customerImage.sprite = recipeSO.calmSprite;
     }
+
 
     public void ClearUI()
     {
