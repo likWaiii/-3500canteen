@@ -1,7 +1,8 @@
 // using System;
 // using System.Collections;
 // using System.Collections.Generic;
-// using Unity.Netcode; // 导入 Netcode
+// using System.Linq;
+// using Unity.Netcode;
 // using UnityEngine;
 
 // public struct RecipeDto : INetworkSerializable
@@ -23,14 +24,15 @@
 // {
 //     public event EventHandler OnRecipeSpawned;
 //     public event EventHandler OnRecipeComplete;
-//     public event EventHandler OnRecipeSucess;
+//     public event EventHandler OnRecipeSuccess;
 //     public event EventHandler OnRecipeFailed;
+//     public event EventHandler<int> OnScoreUpdated;
 
 //     public static DeliveryManager Instance { get; private set; }
 
 //     [SerializeField]
 //     private RecipeListSO recipeListSO;
-
+//     private Dictionary<ulong, int> playerScores = new Dictionary<ulong, int>();
 //     private List<WaitingRecipe> waitingRecipeList;
 //     private float spawnRecipeTimer;
 //     private float spawnRecipeTimerMax = 4f;
@@ -40,13 +42,36 @@
 
 //     private void Awake()
 //     {
+//         if (Instance != null && Instance != this)
+//         {
+//             Debug.LogWarning("[DeliveryManager] 检测到重复实例，销毁当前实例");
+//             Destroy(gameObject);
+//             return;
+//         }
 //         Instance = this;
+//         DontDestroyOnLoad(gameObject); // 如果需要跨场景保留
 //         waitingRecipeList = new List<WaitingRecipe>(new WaitingRecipe[waitingRecipeMax]);
-//         // 给定时器一个初始值，避免一开始就一直 < 0
 //         spawnRecipeTimer = spawnRecipeTimerMax;
+//         Debug.Log("[DeliveryManager] 初始化完成");
+//     }
+
+//     [ClientRpc]
+//     private void SubmitIngredientClientRpc(int slotIndex, string kitchenObjectName, int newCount)
+//     {
 //         Debug.Log(
-//             "[DeliveryManager] Awake 初始化完成，waitingRecipeList.Count=" + waitingRecipeList.Count
+//             $"[DeliveryManager] 客户端收到 SubmitIngredientClientRpc：slotIndex={slotIndex}, kitchenObjectName={kitchenObjectName}, newCount={newCount}"
 //         );
+//         var kitchenObject = recipeListSO.GetKitchenObjectByName(kitchenObjectName);
+//         var wr = waitingRecipeList[slotIndex];
+//         if (wr == null)
+//         {
+//             Debug.LogWarning($"[DeliveryManager] 未找到订单槽 {slotIndex}");
+//             return;
+//         }
+//         wr.submittedDict[kitchenObject] = newCount;
+
+//         // 触发 UI 刷新
+//         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
 //     }
 
 //     private bool HasEmptySlot()
@@ -59,55 +84,33 @@
 //         return false;
 //     }
 
-//     public override void OnNetworkSpawn()
+//     [ClientRpc]
+//     private void UpdateRecipeStatusClientRpc(int slotIndex, bool isCompleted)
 //     {
-//         Debug.Log($"[DeliveryManager] OnNetworkSpawn. IsServer={IsServer}, IsClient={IsClient}");
+//         Debug.Log(
+//             $"[DeliveryManager] 客户端收到 UpdateRecipeStatusClientRpc：slotIndex={slotIndex}, isCompleted={isCompleted}"
+//         );
+//         if (waitingRecipeList[slotIndex] != null)
+//         {
+//             waitingRecipeList[slotIndex].isCompleted = isCompleted;
+//             OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // 刷新 UI
+//         }
 //     }
 
-//     // // Host 会生成订单，所有客户端都能看到
-//     // [ServerRpc(RequireOwnership = false)]
-//     // public void SpawnRecipeServerRpc()
-//     // {
-//     //     spawnRecipeTimer = spawnRecipeTimerMax;
+//     public override void OnNetworkSpawn()
+//     {
+//         Debug.Log(
+//             $"[DeliveryManager] OnNetworkSpawn for Instance {GetInstanceID()}. IsServer={IsServer}, IsClient={IsClient}"
+//         );
 
-//     //     if (KitchenGameManager.Instance.IsGamePlaying() && HasEmptySlot())
-//     //     {
-//     //         RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[
-//     //             UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count)
-//     //         ];
-//     //         WaitingRecipe newWaitingRecipe = new WaitingRecipe(waitingRecipeSO);
+//         if (Instance == null || Instance != this)
+//         {
+//             Debug.LogWarning(
+//                 $"DeliveryManager.Instance 在 OnNetworkSpawn 时不是此实例 ({GetInstanceID()})。当前 Instance ID: {(Instance != null ? Instance.GetInstanceID().ToString() : "null")}"
+//             );
+//         }
+//     }
 
-//     //         List<int> emptyIndices = new List<int>();
-//     //         for (int i = 0; i < waitingRecipeList.Count; i++)
-//     //         {
-//     //             if (waitingRecipeList[i] == null)
-//     //             {
-//     //                 emptyIndices.Add(i);
-//     //             }
-//     //         }
-
-//     //         if (emptyIndices.Count > 0)
-//     //         {
-//     //             int randomIndex = emptyIndices[UnityEngine.Random.Range(0, emptyIndices.Count)];
-//     //             waitingRecipeList[randomIndex] = newWaitingRecipe;
-//     //             // OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-
-//     //             // 通知所有客户端刷新
-//     //             UpdateRecipeListClientRpc();
-//     //             OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-//     //         }
-//     //     }
-
-//     //     SpawnRecipeClientRpc(
-//     //         new RecipeDto
-//     //         {
-//     //             recipeIndex = recipeIndex,
-//     //             slotIndex = slotIndex,
-//     //             remainingTime = newWaitingRecipe.remainingTime,
-//     //         }
-//     //     );
-//     //     OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-//     // }
 //     [ServerRpc(RequireOwnership = false)]
 //     public void SpawnRecipeServerRpc()
 //     {
@@ -115,12 +118,10 @@
 
 //         if (KitchenGameManager.Instance.IsGamePlaying() && HasEmptySlot())
 //         {
-//             // 随机选择一个食谱
 //             int recipeIndex = UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count);
 //             RecipeSO waitingRecipeSO = recipeListSO.recipeSOList[recipeIndex];
 //             WaitingRecipe newWaitingRecipe = new WaitingRecipe(waitingRecipeSO);
 
-//             // 找到所有空槽的索引
 //             List<int> emptyIndices = new List<int>();
 //             for (int i = 0; i < waitingRecipeList.Count; i++)
 //             {
@@ -132,11 +133,9 @@
 
 //             if (emptyIndices.Count > 0)
 //             {
-//                 // 随机选择一个空槽
 //                 int slotIndex = emptyIndices[UnityEngine.Random.Range(0, emptyIndices.Count)];
 //                 waitingRecipeList[slotIndex] = newWaitingRecipe;
 
-//                 // 通知所有客户端更新
 //                 SpawnRecipeClientRpc(
 //                     new RecipeDto
 //                     {
@@ -146,28 +145,56 @@
 //                     }
 //                 );
 
-//                 // 触发事件
+//                 Debug.Log(
+//                     $"[DeliveryManager] 生成新订单：slotIndex={slotIndex}, recipeIndex={recipeIndex}"
+//                 );
 //                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
 //             }
 //         }
 //     }
 
-//     // 客户端会接收更新并刷新 UI
 //     [ClientRpc]
 //     private void UpdateRecipeListClientRpc()
 //     {
+//         Debug.Log("[DeliveryManager] 客户端收到 UpdateRecipeListClientRpc");
 //         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
 //     }
 
-//     // 提交食材的操作由 Host 和 Client 都能调用
-//     public void TrySubmitItemToSlot(int slotIndex, KitchenObjectOS item)
+//     [ServerRpc(RequireOwnership = false)]
+//     public void SubmitIngredientServerRpc(
+//         int slotIndex,
+//         string kitchenObjectName,
+//         ServerRpcParams rpcParams = default
+//     )
+//     {
+//         ulong clientId = rpcParams.Receive.SenderClientId;
+//         Debug.Log(
+//             $"[DeliveryManager] 收到提交请求：clientId={clientId}, slotIndex={slotIndex}, kitchenObjectName={kitchenObjectName}"
+//         );
+//         KitchenObjectOS itemOS = recipeListSO.GetKitchenObjectByName(kitchenObjectName);
+//         if (itemOS == null)
+//         {
+//             Debug.LogWarning($"[DeliveryManager] 未找到 KitchenObject：{kitchenObjectName}");
+//             return;
+//         }
+
+//         ProcessSubmitToSlot(slotIndex, itemOS, clientId);
+//     }
+
+//     private void ProcessSubmitToSlot(int slotIndex, KitchenObjectOS item, ulong clientId)
 //     {
 //         if (slotIndex < 0 || slotIndex >= waitingRecipeList.Count)
+//         {
+//             Debug.LogWarning($"[DeliveryManager] 无效的订单槽：{slotIndex}");
 //             return;
+//         }
 
 //         WaitingRecipe wr = waitingRecipeList[slotIndex];
 //         if (wr == null || wr.isCompleted)
+//         {
+//             Debug.LogWarning($"[DeliveryManager] 订单槽 {slotIndex} 为空或已完成");
 //             return;
+//         }
 
 //         RecipeSO recipeSO = wr.recipeSO;
 
@@ -203,12 +230,13 @@
 //             wr.submittedDict[item] = 1;
 //         }
 
+//         int updatedCount = wr.submittedDict[item];
+//         SubmitIngredientClientRpc(slotIndex, item.objectName, updatedCount);
+
 //         Debug.Log($"✅ 成功提交 {item.objectName} 给订单槽 {slotIndex}");
 
-//         // 提交后立即同步到所有客户端
 //         UpdateRecipeListClientRpc();
 
-//         // 检查订单是否完成
 //         bool allSubmitted = true;
 //         Dictionary<KitchenObjectOS, int> requiredDict = new Dictionary<KitchenObjectOS, int>(
 //             new KitchenObjectOSComparer()
@@ -236,32 +264,59 @@
 //         if (allSubmitted)
 //         {
 //             wr.isCompleted = true;
-//             StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
 //             successfulRecipesAmount++;
 
-//             int recipeValue = 0;
-//             foreach (var obj in wr.recipeSO.kitchenObjectsOSList)
-//             {
-//                 recipeValue += obj.value;
-//             }
+//             int recipeValue = wr.recipeSO.kitchenObjectsOSList.Sum(o => o.value);
 //             totalEarnedValue += recipeValue;
 
-//             Debug.Log($"🎉 订单 {slotIndex} 完成！");
-//             OnRecipeComplete?.Invoke(this, EventArgs.Empty);
-//             OnRecipeSucess?.Invoke(this, EventArgs.Empty);
+//             if (!playerScores.ContainsKey(clientId))
+//                 playerScores[clientId] = 0;
+//             playerScores[clientId] += recipeValue;
+
+//             UpdateRecipeStatusClientRpc(slotIndex, true);
+
+//             var p = new ClientRpcParams
+//             {
+//                 Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } },
+//             };
+//             UpdatePlayerScoreClientRpc(playerScores[clientId], p);
+
+//             Debug.Log(
+//                 $"[DeliveryManager] 订单完成：clientId={clientId}, 得分={playerScores[clientId]}"
+//             );
+//             StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
 //         }
 //         else
 //         {
-//             Debug.Log($"🔄 订单 {slotIndex} 进度更新");
-//             OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+//             UpdateRecipeListClientRpc();
 //         }
+//     }
+
+//     [ClientRpc]
+//     private void UpdatePlayerScoreClientRpc(int newScore, ClientRpcParams rpcParams = default)
+//     {
+//         Debug.Log($"[DeliveryManager] 客户端收到 UpdatePlayerScoreClientRpc：newScore={newScore}");
+//         OnScoreUpdated?.Invoke(this, newScore);
+//     }
+
+//     public int GetPlayerScore(ulong clientId)
+//     {
+//         return playerScores.TryGetValue(clientId, out var score) ? score : 0;
 //     }
 
 //     private IEnumerator DelayRemoveCompletedOrder(int slotIndex, float delay)
 //     {
 //         yield return new WaitForSeconds(delay);
 //         waitingRecipeList[slotIndex] = null;
-//         UpdateRecipeListClientRpc(); // 强制刷新 UI 显示空槽
+//         RemoveOrderSlotClientRpc(slotIndex);
+//     }
+
+//     [ClientRpc]
+//     private void RemoveOrderSlotClientRpc(int slotIndex)
+//     {
+//         Debug.Log($"[DeliveryManager] 客户端收到 RemoveOrderSlotClientRpc：slotIndex={slotIndex}");
+//         waitingRecipeList[slotIndex] = null;
+//         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
 //     }
 
 //     private void Update()
@@ -270,30 +325,47 @@
 //             return;
 
 //         spawnRecipeTimer -= Time.deltaTime;
-//         // Debug.Log($"[DeliveryManager] Timer: {spawnRecipeTimer:F2}s 剩余");
+
 //         if (spawnRecipeTimer <= 0f)
 //         {
-//             Debug.Log("[DeliveryManager] Timer 到 0，尝试生成订单");
 //             spawnRecipeTimer = spawnRecipeTimerMax;
 //             SpawnRecipeOnServer();
 //         }
+
+//         for (int i = 0; i < waitingRecipeList.Count; i++)
+//         {
+//             if (waitingRecipeList[i] != null && !waitingRecipeList[i].isCompleted)
+//             {
+//                 waitingRecipeList[i].remainingTime -= Time.deltaTime;
+
+//                 if (waitingRecipeList[i].remainingTime <= 0f)
+//                 {
+//                     waitingRecipeList[i].remainingTime = 0f;
+//                     OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+//                     StartCoroutine(DelayRemoveCompletedOrder(i, 2f));
+//                 }
+
+//                 UpdateRecipeTimeClientRpc(i, waitingRecipeList[i].remainingTime);
+//             }
+//         }
 //     }
 
-//     /// <summary>
-//     /// 真正的生成订单逻辑，只在服务端运行，
-//     /// 并通过 ClientRpc 推给所有客户端
-//     /// </summary>
+//     [ClientRpc]
+//     private void UpdateRecipeTimeClientRpc(int slotIndex, float remainingTime)
+//     {
+//         if (waitingRecipeList[slotIndex] != null)
+//         {
+//             waitingRecipeList[slotIndex].remainingTime = remainingTime;
+//         }
+//     }
+
 //     private void SpawnRecipeOnServer()
 //     {
 //         bool playing = KitchenGameManager.Instance?.IsGamePlaying() ?? false;
 //         bool hasSlot = HasEmptySlot();
-//         Debug.Log(
-//             $"[DeliveryManager] SpawnRecipeOnServer(), IsGamePlaying={playing}, HasEmptySlot={hasSlot}"
-//         );
 
 //         if (!playing || !hasSlot)
 //         {
-//             Debug.Log("[DeliveryManager] 跳过生成：游戏状态 or 空槽 条件不满足");
 //             return;
 //         }
 
@@ -306,20 +378,15 @@
 //             if (waitingRecipeList[i] == null)
 //                 empty.Add(i);
 
-//         Debug.Log("[DeliveryManager] 空槽索引：" + string.Join(",", empty));
-
 //         if (empty.Count == 0)
 //         {
-//             Debug.Log("[DeliveryManager] 没有空槽可用");
 //             return;
 //         }
 
 //         int slot = empty[UnityEngine.Random.Range(0, empty.Count)];
 //         waitingRecipeList[slot] = newWaiting;
-//         Debug.Log($"[DeliveryManager] 在槽 {slot} 生成了新订单，RecipeIndex={recipeIndex}");
 
 //         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-//         Debug.Log("[DeliveryManager] 触发 OnRecipeSpawned 事件");
 
 //         SpawnRecipeClientRpc(
 //             new RecipeDto
@@ -329,51 +396,34 @@
 //                 remainingTime = newWaiting.remainingTime,
 //             }
 //         );
-//         Debug.Log("[DeliveryManager] 已调用 SpawnRecipeClientRpc 同步客户端");
 //     }
 
 //     [ClientRpc]
 //     private void SpawnRecipeClientRpc(RecipeDto dto)
 //     {
-//         Debug.Log(
-//             $"[DeliveryManager] ClientRpc 收到配方：recipeIndex={dto.recipeIndex}, slotIndex={dto.slotIndex}, remainingTime={dto.remainingTime:F2}"
-//         );
 //         var so = recipeListSO.recipeSOList[dto.recipeIndex];
 //         waitingRecipeList[dto.slotIndex] = new WaitingRecipe(so)
 //         {
 //             remainingTime = dto.remainingTime,
 //         };
 //         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
-//         Debug.Log("[DeliveryManager] 客户端已触发 OnRecipeSpawned，UI 应刷新");
 //     }
 
-//     /// <summary>
-//     /// 给旧的 DeliveryCounter/DeliveryManagerUI 调用，获取当前所有订单槽的状态
-//     /// </summary>
 //     public List<WaitingRecipe> GetWaitingRecipeList()
 //     {
 //         return waitingRecipeList;
 //     }
 
-//     /// <summary>
-//     /// 给旧的 ScoreUI 调用，获取当前完成的订单数
-//     /// </summary>
 //     public int GetSuccessfulRecipesAmount()
 //     {
 //         return successfulRecipesAmount;
 //     }
 
-//     /// <summary>
-//     /// 给旧的 ScoreUI 调用，获取当前总收益
-//     /// </summary>
 //     public int GetTotalEarnedValue()
 //     {
 //         return totalEarnedValue;
 //     }
 
-//     /// <summary>
-//     /// 如果你还需要 DeliverRecipe（Plate 交付）逻辑，原样拷贝并在提交后同步：
-//     /// </summary>
 //     public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
 //     {
 //         for (int i = 0; i < waitingRecipeList.Count; i++)
@@ -402,21 +452,20 @@
 //                 wr.isCompleted = true;
 //                 waitingRecipeList[i] = null;
 //                 successfulRecipesAmount++;
-//                 // 同步状态给客户端
 //                 UpdateRecipeListClientRpc();
 //                 OnRecipeComplete?.Invoke(this, EventArgs.Empty);
-//                 OnRecipeSucess?.Invoke(this, EventArgs.Empty);
+//                 OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
 //                 return;
 //             }
 //         }
 
-//         // 都不匹配则失败
 //         OnRecipeFailed?.Invoke(this, EventArgs.Empty);
 //     }
 // }
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -439,7 +488,7 @@ public class DeliveryManager : NetworkBehaviour
 {
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeComplete;
-    public event EventHandler OnRecipeSucess;
+    public event EventHandler OnRecipeSuccess;
     public event EventHandler OnRecipeFailed;
     public event EventHandler<int> OnScoreUpdated;
 
@@ -447,7 +496,7 @@ public class DeliveryManager : NetworkBehaviour
 
     [SerializeField]
     private RecipeListSO recipeListSO;
-
+    private Dictionary<ulong, int> playerScores = new Dictionary<ulong, int>();
     private List<WaitingRecipe> waitingRecipeList;
     private float spawnRecipeTimer;
     private float spawnRecipeTimerMax = 4f;
@@ -459,6 +508,7 @@ public class DeliveryManager : NetworkBehaviour
     {
         if (Instance != null && Instance != this)
         {
+            Debug.LogWarning("[DeliveryManager] 检测到重复实例，销毁当前实例");
             Destroy(gameObject);
             return;
         }
@@ -466,12 +516,59 @@ public class DeliveryManager : NetworkBehaviour
         DontDestroyOnLoad(gameObject); // 如果需要跨场景保留
         waitingRecipeList = new List<WaitingRecipe>(new WaitingRecipe[waitingRecipeMax]);
         spawnRecipeTimer = spawnRecipeTimerMax;
+        Debug.Log("[DeliveryManager] 初始化完成");
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        Debug.Log(
+            $"[DeliveryManager] OnNetworkSpawn for Instance {GetInstanceID()}. IsServer={IsServer}, IsClient={IsClient}"
+        );
+
+        // 确保单例逻辑正确
+        if (IsServer)
+        {
+            if (Instance != null && Instance != this)
+            {
+                Debug.LogWarning("[DeliveryManager] 服务器端检测到重复实例，销毁当前实例");
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
+        else
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else if (Instance != this)
+            {
+                Debug.LogWarning("[DeliveryManager] 客户端检测到重复实例，销毁当前实例");
+                Destroy(gameObject);
+            }
+        }
     }
 
     [ClientRpc]
-    private void UpdateScoreClientRpc(int totalEarnedValue)
+    private void SubmitIngredientClientRpc(int slotIndex, string kitchenObjectName, int newCount)
     {
-        OnScoreUpdated?.Invoke(this, totalEarnedValue);
+        Debug.Log(
+            $"[DeliveryManager] 客户端收到 SubmitIngredientClientRpc：slotIndex={slotIndex}, kitchenObjectName={kitchenObjectName}, newCount={newCount}"
+        );
+        var kitchenObject = recipeListSO.GetKitchenObjectByName(kitchenObjectName);
+        var wr = waitingRecipeList[slotIndex];
+        if (wr == null)
+        {
+            Debug.LogWarning($"[DeliveryManager] 未找到订单槽 {slotIndex}");
+            return;
+        }
+        wr.submittedDict[kitchenObject] = newCount;
+
+        // 触发 UI 刷新
+        OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     private bool HasEmptySlot()
@@ -487,27 +584,13 @@ public class DeliveryManager : NetworkBehaviour
     [ClientRpc]
     private void UpdateRecipeStatusClientRpc(int slotIndex, bool isCompleted)
     {
+        Debug.Log(
+            $"[DeliveryManager] 客户端收到 UpdateRecipeStatusClientRpc：slotIndex={slotIndex}, isCompleted={isCompleted}"
+        );
         if (waitingRecipeList[slotIndex] != null)
         {
             waitingRecipeList[slotIndex].isCompleted = isCompleted;
             OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // 刷新 UI
-        }
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        Debug.Log(
-            $"[DeliveryManager] OnNetworkSpawn for Instance {GetInstanceID()}. IsServer={IsServer}, IsClient={IsClient}"
-        );
-
-        if (Instance == null || Instance != this)
-        {
-            // 这可能发生在其他实例成为了单例，或者单例引用被重置
-            Debug.LogWarning(
-                $"DeliveryManager.Instance 在 OnNetworkSpawn 时不是此实例 ({GetInstanceID()})。当前 Instance ID: {(Instance != null ? Instance.GetInstanceID().ToString() : "null")}"
-            );
-            // 如果不是单例，可能需要销毁自己，或者什么都不做（如果它是客户端同步过来的非主要实例）
-            // 但最好的做法是确保只有一个主要的 Server/Host 实例。
         }
     }
 
@@ -545,38 +628,56 @@ public class DeliveryManager : NetworkBehaviour
                     }
                 );
 
+                Debug.Log(
+                    $"[DeliveryManager] 生成新订单：slotIndex={slotIndex}, recipeIndex={recipeIndex}"
+                );
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
     }
 
-    // private void OnDestroy()
-    // {
-    //     // 如果被销毁的实例是当前的单例，则清除引用
-    //     if (Instance == this)
-    //     {
-    //         base.OnDestroy(); // 调用基类的 OnDestroy 方法
-    //         Debug.Log($"DeliveryManager 单例引用被清除。销毁的实例 ID: {GetInstanceID()}");
-    //     }
-    //     // 在销毁时取消事件订阅，防止内存泄漏（尽管 ScoreUI 也在 OnDestroy 取消）
-    //     // 这里的取消订阅是针对 DeliveryManager 内部可能的其他订阅者，ScoreUI 的取消订阅逻辑是在 ScoreUI 自己的 OnDestroy 里。
-    //     // OnRecipeSucess = null; // 不建议直接设为null，这样会清除所有订阅者，应该用 -=
-    // }
-
     [ClientRpc]
     private void UpdateRecipeListClientRpc()
     {
+        Debug.Log("[DeliveryManager] 客户端收到 UpdateRecipeListClientRpc");
         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
     }
 
-    public void TrySubmitItemToSlot(int slotIndex, KitchenObjectOS item)
+    [ServerRpc(RequireOwnership = false)]
+    public void SubmitIngredientServerRpc(
+        int slotIndex,
+        string kitchenObjectName,
+        ServerRpcParams rpcParams = default
+    )
+    {
+        ulong clientId = rpcParams.Receive.SenderClientId;
+        Debug.Log(
+            $"[DeliveryManager] 收到提交请求：clientId={clientId}, slotIndex={slotIndex}, kitchenObjectName={kitchenObjectName}"
+        );
+        KitchenObjectOS itemOS = recipeListSO.GetKitchenObjectByName(kitchenObjectName);
+        if (itemOS == null)
+        {
+            Debug.LogWarning($"[DeliveryManager] 未找到 KitchenObject：{kitchenObjectName}");
+            return;
+        }
+
+        ProcessSubmitToSlot(slotIndex, itemOS, clientId);
+    }
+
+    private void ProcessSubmitToSlot(int slotIndex, KitchenObjectOS item, ulong clientId)
     {
         if (slotIndex < 0 || slotIndex >= waitingRecipeList.Count)
+        {
+            Debug.LogWarning($"[DeliveryManager] 无效的订单槽：{slotIndex}");
             return;
+        }
 
         WaitingRecipe wr = waitingRecipeList[slotIndex];
         if (wr == null || wr.isCompleted)
+        {
+            Debug.LogWarning($"[DeliveryManager] 订单槽 {slotIndex} 为空或已完成");
             return;
+        }
 
         RecipeSO recipeSO = wr.recipeSO;
 
@@ -612,6 +713,9 @@ public class DeliveryManager : NetworkBehaviour
             wr.submittedDict[item] = 1;
         }
 
+        int updatedCount = wr.submittedDict[item];
+        SubmitIngredientClientRpc(slotIndex, item.objectName, updatedCount);
+
         Debug.Log($"✅ 成功提交 {item.objectName} 给订单槽 {slotIndex}");
 
         UpdateRecipeListClientRpc();
@@ -643,44 +747,64 @@ public class DeliveryManager : NetworkBehaviour
         if (allSubmitted)
         {
             wr.isCompleted = true;
-            UpdateRecipeStatusClientRpc(slotIndex, true);
-            StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
             successfulRecipesAmount++;
 
-            int recipeValue = 0;
-            foreach (var obj in wr.recipeSO.kitchenObjectsOSList)
-            {
-                recipeValue += obj.value;
-            }
+            int recipeValue = wr.recipeSO.kitchenObjectsOSList.Sum(o => o.value);
             totalEarnedValue += recipeValue;
-            UpdateScoreClientRpc(totalEarnedValue);
-            Debug.Log($"🎉 订单 {slotIndex} 完成！在 DeliveryManager 实例 {GetInstanceID()}");
-            OnRecipeComplete?.Invoke(this, EventArgs.Empty);
-            if (OnRecipeSucess == null)
-            {
-                Debug.Log($"DeliveryManager 实例 {GetInstanceID()}: OnRecipeSucess 事件未被订阅");
-            }
-            else
-            {
-                Debug.Log($"DeliveryManager 实例 {GetInstanceID()}: 触发 OnRecipeSucess 事件");
-                OnRecipeSucess?.Invoke(this, EventArgs.Empty);
-            }
 
-            // 刷新 UI
-            UpdateRecipeListClientRpc();
+            if (!playerScores.ContainsKey(clientId))
+                playerScores[clientId] = 0;
+            playerScores[clientId] += recipeValue;
+
+            UpdateRecipeStatusClientRpc(slotIndex, true);
+
+            // 只给提交者发 RPC
+            var rpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } },
+            };
+            UpdatePlayerScoreClientRpc(playerScores[clientId], rpcParams);
+
+            Debug.Log(
+                $"[DeliveryManager] 订单完成：clientId={clientId}, 得分={playerScores[clientId]}"
+            );
+            StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
         }
         else
         {
-            Debug.Log($"🔄 订单 {slotIndex} 进度更新");
-            OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
+            UpdateRecipeListClientRpc();
         }
+    }
+
+    [ClientRpc]
+    private void UpdatePlayerScoreClientRpc(int newScore, ClientRpcParams rpcParams = default)
+    {
+        Debug.Log($"[DeliveryManager] 客户端收到 UpdatePlayerScoreClientRpc：newScore={newScore}");
+
+        ulong localClientId = NetworkManager.Singleton.LocalClientId;
+        playerScores[localClientId] = newScore;
+        
+        OnScoreUpdated?.Invoke(this, newScore);
+    }
+
+    public int GetPlayerScore(ulong clientId)
+    {
+        return playerScores.TryGetValue(clientId, out var score) ? score : 0;
     }
 
     private IEnumerator DelayRemoveCompletedOrder(int slotIndex, float delay)
     {
         yield return new WaitForSeconds(delay);
         waitingRecipeList[slotIndex] = null;
-        UpdateRecipeListClientRpc();
+        RemoveOrderSlotClientRpc(slotIndex);
+    }
+
+    [ClientRpc]
+    private void RemoveOrderSlotClientRpc(int slotIndex)
+    {
+        Debug.Log($"[DeliveryManager] 客户端收到 RemoveOrderSlotClientRpc：slotIndex={slotIndex}");
+        waitingRecipeList[slotIndex] = null;
+        OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
     }
 
     private void Update()
@@ -696,7 +820,6 @@ public class DeliveryManager : NetworkBehaviour
             SpawnRecipeOnServer();
         }
 
-        // 更新所有订单的剩余时间
         for (int i = 0; i < waitingRecipeList.Count; i++)
         {
             if (waitingRecipeList[i] != null && !waitingRecipeList[i].isCompleted)
@@ -710,7 +833,6 @@ public class DeliveryManager : NetworkBehaviour
                     StartCoroutine(DelayRemoveCompletedOrder(i, 2f));
                 }
 
-                // 同步剩余时间到客户端
                 UpdateRecipeTimeClientRpc(i, waitingRecipeList[i].remainingTime);
             }
         }
@@ -820,7 +942,7 @@ public class DeliveryManager : NetworkBehaviour
                 successfulRecipesAmount++;
                 UpdateRecipeListClientRpc();
                 OnRecipeComplete?.Invoke(this, EventArgs.Empty);
-                OnRecipeSucess?.Invoke(this, EventArgs.Empty);
+                OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
                 return;
             }
         }
