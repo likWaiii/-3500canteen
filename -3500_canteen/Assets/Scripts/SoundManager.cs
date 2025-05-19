@@ -103,8 +103,12 @@ public class SoundManager : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+<<<<<<< HEAD
     public float GetVolume()
     {
+=======
+    public float GetVolume() {
+>>>>>>> upstream/main
         return volume;
     }
 }

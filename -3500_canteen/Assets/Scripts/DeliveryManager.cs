@@ -1,4 +1,4 @@
-﻿// using System;
+// using System;
 // using System.Collections;
 // using System.Collections.Generic;
 // using Unity.Netcode; // 导入 Netcode
@@ -442,7 +442,7 @@ public class DeliveryManager : NetworkBehaviour
     public event EventHandler OnRecipeSucess;
     public event EventHandler OnRecipeFailed;
     public event EventHandler<int> OnScoreUpdated;
-    
+
     public static DeliveryManager Instance { get; private set; }
 
     [SerializeField]

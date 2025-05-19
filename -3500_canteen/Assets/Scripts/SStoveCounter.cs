@@ -304,7 +304,6 @@ public class SStoveCounter : BaseCounter, IHasProgress
             return null;
         }
     }
-
     private Frying2ReciepeSO GetFrying2ReciepeSOWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         foreach (Frying2ReciepeSO frying2RecipeSO in Frying2ReciepeSOArray)
@@ -330,7 +329,6 @@ public class SStoveCounter : BaseCounter, IHasProgress
 
         return null;
     }
-
     private FryingReciepeSO GetFrying2SOWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         foreach (FryingReciepeSO fryingRecipeSO in fryingReciepeSOArray)
