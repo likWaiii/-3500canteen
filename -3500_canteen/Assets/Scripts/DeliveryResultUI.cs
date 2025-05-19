@@ -38,7 +38,7 @@ public class DeliveryResultUI : MonoBehaviour
 
     private void Start()
     {
-        DeliveryManager.Instance.OnRecipeSucess += DeliveryManger_OnRecipeSucess;
+        DeliveryManager.Instance.OnRecipeSuccess += DeliveryManger_OnRecipeSuccess;
         DeliveryManager.Instance.OnRecipeFailed += DeliveryManger_OnRecipeFailed;
 
         gameObject.SetActive(false);
@@ -54,7 +54,7 @@ public class DeliveryResultUI : MonoBehaviour
         messageText.text = "送达\n失败";
     }
 
-    private void DeliveryManger_OnRecipeSucess(object sender, System.EventArgs e)
+    private void DeliveryManger_OnRecipeSuccess(object sender, System.EventArgs e)
     {
         gameObject.SetActive(true);
 
