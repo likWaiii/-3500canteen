@@ -9,7 +9,4 @@ public class BurningReciepeSO : ScriptableObject
     public KitchenObjectOS output;
 
     public float burningTimerMax;
-
-
-
 }

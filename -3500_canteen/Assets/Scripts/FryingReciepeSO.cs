@@ -8,7 +8,4 @@ public class FryingReciepeSO : ScriptableObject
     public KitchenObjectOS input;
     public KitchenObjectOS output;
     public float fryingTimerMax;
-
-
-
 }

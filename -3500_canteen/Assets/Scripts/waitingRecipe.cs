@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class WaitingRecipe
 {
@@ -8,6 +7,7 @@ public class WaitingRecipe
     public float remainingTime;
     public bool isCompleted;
     public Dictionary<KitchenObjectOS, int> submittedDict;
+
     public WaitingRecipe(RecipeSO recipeSO)
     {
         this.recipeSO = recipeSO;

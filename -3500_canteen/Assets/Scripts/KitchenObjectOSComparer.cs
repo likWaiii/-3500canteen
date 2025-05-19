@@ -6,8 +6,9 @@ public class KitchenObjectOSComparer : IEqualityComparer<KitchenObjectOS>
 {
     public bool Equals(KitchenObjectOS a, KitchenObjectOS b)
     {
-        if (a == null || b == null) return false;
-        return a.objectName == b.objectName; // ±È½ÏÄÚÈÝ
+        if (a == null || b == null)
+            return false;
+        return a.objectName == b.objectName;
     }
 
     public int GetHashCode(KitchenObjectOS obj)
@@ -15,4 +16,3 @@ public class KitchenObjectOSComparer : IEqualityComparer<KitchenObjectOS>
         return obj.objectName.GetHashCode();
     }
 }
-

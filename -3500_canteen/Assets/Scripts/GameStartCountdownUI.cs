@@ -3,50 +3,63 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GameStartCountdownUI : MonoBehaviour {
-
+public class GameStartCountdownUI : MonoBehaviour
+{
     private const string NUMBER_POPUP = "NumberPOPup";
 
-    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField]
+    private TextMeshProUGUI countdownText;
 
     private Animator animator;
 
     private int previousCountDownNumber;
-    private void Awake() {
+
+    private void Awake()
+    {
         animator = GetComponent<Animator>();
     }
 
-    public void Start () {
+    public void Start()
+    {
         KitchenGameManager.Instance.OnStateChanged += KitchenManager_OnStateChanged;
 
         Hide();
     }
 
-    private void KitchenManager_OnStateChanged(object sender, System.EventArgs e) {
-        if (KitchenGameManager.Instance.IsCountToStartActive()) {
+    private void KitchenManager_OnStateChanged(object sender, System.EventArgs e)
+    {
+        if (KitchenGameManager.Instance.IsCountToStartActive())
+        {
             Show();
         }
-        else {
+        else
+        {
             Hide();
         }
     }
 
-    private void Update() {
-        int countdownNummber = Mathf.CeilToInt(KitchenGameManager.Instance.GetCountdownToStartTimer());
-        countdownText.text =countdownNummber.ToString();
+    private void Update()
+    {
+        int countdownNummber = Mathf.CeilToInt(
+            KitchenGameManager.Instance.GetCountdownToStartTimer()
+        );
+        countdownText.text = countdownNummber.ToString();
 
-        if(previousCountDownNumber != countdownNummber) {
+        if (previousCountDownNumber != countdownNummber)
+        {
             previousCountDownNumber = countdownNummber;
             animator.SetTrigger(NUMBER_POPUP);
             SoundManager.Instance.PlayCountDownSound();
         }
     }
 
-    private void Hide() {
+    private void Hide()
+    {
         gameObject.SetActive(false);
     }
 
-    private void Show() {
+    private void Show()
+    {
         gameObject.SetActive(true);
     }
 }

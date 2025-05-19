@@ -5,22 +5,38 @@ using UnityEngine;
 
 public class ContainerCounter : BaseCounter
 {
-
     public event EventHandler OnPlayerGrabbedObject;
 
-    [SerializeField] private KitchenObjectOS kitchenObjectOS;
+    [SerializeField]
+    private KitchenObjectOS kitchenObjectOS;
 
-
-    public override void Interact(Player player) {
-
-        if (!player.HasKitchenObject()) {
+    public override void Interact(Player player)
+    {
+        if (!player.HasKitchenObject())
+        {
             //player os not carring anything
 
-            KitchenObject.SpwanKitchenObject(kitchenObjectOS,player);
-
-
+            KitchenObject.SpwanKitchenObject(kitchenObjectOS, player);
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
         }
     }
-
 }
+// using System;
+// using UnityEngine;
+
+// public class ContainerCounter : BaseCounter
+// {
+//     public event EventHandler OnPlayerGrabbedObject;
+
+//     [SerializeField]
+//     private KitchenObjectOS kitchenObjectOS;
+
+//     public override void Interact(Player player)
+//     {
+//         if (!player.HasKitchenObject())
+//         {
+//             KitchenObject.SpawnKitchenObject(kitchenObjectOS, player.NetworkObject);
+//             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
+//         }
+//     }
+// }
