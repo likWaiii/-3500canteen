@@ -60,6 +60,7 @@ public class DeliveryManagerUI : MonoBehaviour
         yield return new WaitUntil(() => DeliveryManager.Instance != null);
 
         // 订阅事件
+        DeliveryManager.Instance.OnRecipeSpawned += OnRecipeChanged;
         DeliveryManager.Instance.OnRecipeSpawned += HandleRecipeChanged;
         DeliveryManager.Instance.OnRecipeComplete += HandleRecipeChanged;
         DeliveryManager.Instance.OnRecipeFailed += HandleRecipeChanged;
@@ -68,12 +69,17 @@ public class DeliveryManagerUI : MonoBehaviour
         UpdateVisual();
     }
 
+    private void OnRecipeChanged(object sender, EventArgs e)
+    {
+        UpdateVisual();
+    }
+
     private void OnDisable()
     {
         // 取消订阅，防止内存泄漏
         if (DeliveryManager.Instance == null)
             return;
-
+        DeliveryManager.Instance.OnRecipeSpawned -= OnRecipeChanged;
         DeliveryManager.Instance.OnRecipeSpawned -= HandleRecipeChanged;
         DeliveryManager.Instance.OnRecipeComplete -= HandleRecipeChanged;
         DeliveryManager.Instance.OnRecipeFailed -= HandleRecipeChanged;
@@ -84,6 +90,32 @@ public class DeliveryManagerUI : MonoBehaviour
         UpdateVisual();
     }
 
+    // private void UpdateVisual()
+    // {
+    //     var dm = DeliveryManager.Instance;
+    //     if (dm == null)
+    //         return;
+
+    //     var waitingRecipes = dm.GetWaitingRecipeList();
+    //     if (waitingRecipes == null)
+    //         return;
+
+    //     for (int i = 0; i < slotUIs.Count; i++)
+    //     {
+    //         var ui = slotUIs[i];
+    //         if (ui == null)
+    //             continue;
+
+    //         if (i < waitingRecipes.Count && waitingRecipes[i] != null)
+    //         {
+    //             ui.SetWaitingRecipe(waitingRecipes[i]);
+    //         }
+    //         else
+    //         {
+    //             ui.ClearUI();
+    //         }
+    //     }
+    // }
     private void UpdateVisual()
     {
         var dm = DeliveryManager.Instance;
@@ -100,13 +132,17 @@ public class DeliveryManagerUI : MonoBehaviour
             if (ui == null)
                 continue;
 
-            if (i < waitingRecipes.Count && waitingRecipes[i] != null)
+            if (
+                i < waitingRecipes.Count
+                && waitingRecipes[i] != null
+                && !waitingRecipes[i].isCompleted
+            )
             {
                 ui.SetWaitingRecipe(waitingRecipes[i]);
             }
             else
             {
-                ui.ClearUI();
+                ui.ClearUI(); // 清理已完成的订单
             }
         }
     }

@@ -56,7 +56,7 @@ public class SStoveCounter : BaseCounter, IHasProgress
     {
         if (HasKitchenObject())
         {
-            Debug.LogWarning("1£¡");
+            // Debug.LogWarning("1£¡");
             switch (state)
             {
                 case State.Idle:

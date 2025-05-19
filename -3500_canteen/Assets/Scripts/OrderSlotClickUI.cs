@@ -44,7 +44,7 @@ public class OrderSlotClickUI : MonoBehaviour
 
         // 提交食材到对应槽位
         DeliveryManager.Instance.TrySubmitItemToSlot(slotIndex, held);
-
+        // DeliveryManager.Instance.TrySubmitItemToSlotServerRpc(slotIndex, held);
         // 清除并销毁
         Player.Instance.GetKitchenObject().DestroySelf();
         Player.Instance.ClearKitchenObject();

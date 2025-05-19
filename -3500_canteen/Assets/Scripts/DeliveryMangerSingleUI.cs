@@ -98,24 +98,54 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         currentWaitingRecipe = null;
     }
 
+    // private void Update()
+    // {
+    //     if (currentWaitingRecipe == null)
+    //         return;
+
+    //     // ✅ 更新时间进度条
+    //     float remaining = currentWaitingRecipe.remainingTime;
+    //     float max = currentWaitingRecipe.recipeSO.maxTime;
+    //     timeSlider.value = remaining / max;
+
+    //     // ✅ 如果订单完成或失败，显示不同表情
+    //     if (currentWaitingRecipe.isCompleted)
+    //     {
+    //         customerImage.sprite = currentWaitingRecipe.recipeSO.happySprite;
+    //     }
+    //     else if (remaining <= 0f)
+    //     {
+    //         customerImage.sprite = currentWaitingRecipe.recipeSO.angrySprite;
+    //     }
+    // }
     private void Update()
     {
         if (currentWaitingRecipe == null)
             return;
 
-        // ✅ 更新时间进度条
+        // 更新时间进度条
         float remaining = currentWaitingRecipe.remainingTime;
         float max = currentWaitingRecipe.recipeSO.maxTime;
         timeSlider.value = remaining / max;
 
-        // ✅ 如果订单完成或失败，显示不同表情
+        // 如果订单完成或失败，显示不同表情
         if (currentWaitingRecipe.isCompleted)
         {
             customerImage.sprite = currentWaitingRecipe.recipeSO.happySprite;
+            // 延迟清理 UI
+            StartCoroutine(DelayClearUI(2f)); // 2 秒后清理 UI
         }
         else if (remaining <= 0f)
         {
             customerImage.sprite = currentWaitingRecipe.recipeSO.angrySprite;
+            // 延迟清理 UI
+            StartCoroutine(DelayClearUI(2f)); // 2 秒后清理 UI
         }
+    }
+
+    private IEnumerator DelayClearUI(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ClearUI(); // 清理 UI
     }
 }
