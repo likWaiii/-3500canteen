@@ -21,11 +21,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: sky
-  m_Shader: {fileID: 4800000, guid: d5dae2715b3fa054e8e1e0ba928f0c5d, type: 3}
+  m_Shader: {fileID: 108, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _MAPPING_LATITUDE_LONGITUDE_LAYOUT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -77,7 +78,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 05b5d0241fc749c48bdb413d9fa9fa9a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -97,6 +98,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -122,6 +127,7 @@ Material:
     - _AlphaToMask: 0
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
+    - _BottomExponent: 1
     - _BottomHeight: -0.176
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -135,12 +141,19 @@ Material:
     - _EnvironmentReflections: 1
     - _Exponent: 4.38
     - _Exposure: 1
+    - _Float: 0
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _ImageType: 0
+    - _Layout: 0
+    - _Mapping: 1
     - _Metallic: 0
+    - _MiddleHeight: 0
+    - _MirrorOnBack: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Rotation: 0
@@ -149,10 +162,16 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
+    - _SunEnabled: 1
+    - _SunIntensity: 1.73
+    - _SunSize: 0.1
     - _Surface: 0
-    - _TopHeight: 0.216
+    - _TopExponent: 1
+    - _TopHeight: 0.248
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _shadowsize: 0.16
+    - _speed: 0.1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BottomColor: {r: 1, g: 0.8479539, b: 0.7704402, a: 1}
@@ -160,6 +179,11 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _MiddleColor: {r: 0.9402515, g: 0.96405756, b: 1, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    - _Tint: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
-    - _TopColor: {r: 0.73434585, g: 0.8648759, b: 0.99371064, a: 1}
+    - _SunPosition: {r: 0.03, g: 0.38, b: 1, a: 0}
+    - _Tint: {r: 0.4077765, g: 0.76729554, b: 0.5981878, a: 0.5}
+    - _TopColor: {r: 0.5943395, g: 0.8033161, b: 1, a: 1}
+    - _down: {r: 0.6886792, g: 0.9159668, b: 1, a: 0}
+    - _light: {r: 1, g: 1, b: 1, a: 0}
+    - _shadow: {r: 0.5943395, g: 0.942045, b: 1, a: 0}
+    - _up: {r: 0.48427665, g: 0.3609231, b: 0.3609231, a: 0}
   m_BuildTextureStacks: []

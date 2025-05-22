@@ -7,9 +7,11 @@ Shader "Custom/URP/SkyboxGradient"
         _BottomColor ("底部颜色", Color) = (0.6, 0.4, 0.3, 1.0)
         
         _TopHeight ("顶部高度", Range(-1, 1)) = 0.8
+        _MiddleHeight ("中间高度", Range(-1, 1)) = 0.0
         _BottomHeight ("底部高度", Range(-1, 1)) = -0.2
         
-        _Exponent ("渐变指数", Range(0.1, 10)) = 1.0
+        _TopExponent ("顶部渐变指数", Range(0.1, 10)) = 1.0
+        _BottomExponent ("底部渐变指数", Range(0.1, 10)) = 1.0
     }
     
     SubShader
@@ -40,13 +42,14 @@ Shader "Custom/URP/SkyboxGradient"
                 float3 direction : TEXCOORD0;
             };
             
-            // 属性
             half4 _TopColor;
             half4 _MiddleColor;
             half4 _BottomColor;
             half _TopHeight;
+            half _MiddleHeight;
             half _BottomHeight;
-            half _Exponent;
+            half _TopExponent;
+            half _BottomExponent;
             
             Varyings vert(Attributes input)
             {
@@ -58,37 +61,26 @@ Shader "Custom/URP/SkyboxGradient"
             
             half4 frag(Varyings input) : SV_Target
             {
-                // 归一化方向向量
                 float3 dir = normalize(input.direction);
-                
-                // 获取Y坐标作为高度值 (-1 到 1)
                 float height = dir.y;
                 
-                // 计算顶部和中间颜色的混合因子
-                float topBlend = saturate(pow((height - _BottomHeight) / (_TopHeight - _BottomHeight), _Exponent));
-                
-                // 计算最终颜色
                 half4 finalColor;
                 
-                if (height > _TopHeight)
+                // 安全计算插值因子
+                float topFactor = saturate((height - _MiddleHeight) / max(0.001, _TopHeight - _MiddleHeight));
+                float bottomFactor = saturate((height - _BottomHeight) / max(0.001, _MiddleHeight - _BottomHeight));
+                
+                if (height > _MiddleHeight)
                 {
-                    // 高于顶部高度，使用顶部颜色
-                    finalColor = _TopColor;
-                }
-                else if (height < _BottomHeight)
-                {
-                    // 低于底部高度，使用底部颜色
-                    finalColor = _BottomColor;
-                }
-                else if (height > 0)
-                {
-                    // 高于地平线，混合顶部和中间颜色
-                    finalColor = lerp(_MiddleColor, _TopColor, topBlend);
+                    // 顶部渐变
+                    float t = pow(topFactor, _TopExponent);
+                    finalColor = lerp(_MiddleColor, _TopColor, t);
                 }
                 else
                 {
-                    // 低于地平线，混合底部和中间颜色
-                    finalColor = lerp(_BottomColor, _MiddleColor, topBlend);
+                    // 底部渐变
+                    float t = pow(bottomFactor, _BottomExponent);
+                    finalColor = lerp(_BottomColor, _MiddleColor, t);
                 }
                 
                 return finalColor;
@@ -98,4 +90,4 @@ Shader "Custom/URP/SkyboxGradient"
     }
     
     FallBack "Skybox/Procedural"
-}
+}    

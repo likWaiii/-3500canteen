@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: meat-raw
+  m_Name: hamburger-paper
   m_Shader: {fileID: -6465566751694194690, guid: 09fcd6c004df8d242870799b02f11c33, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -68,7 +68,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 1f4aa0c1f67762843b2db518f603d712, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2dc4be0e3cb56154286755050c189e0a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -99,7 +99,7 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _Float: -0.71
+    - _Float: 0.24
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -122,8 +122,8 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    - _dark: {r: 0.9433962, g: 0.80989665, b: 0.80989665, a: 0}
-    - _light: {r: 0.64779866, g: 0.5373295, b: 0.49909014, a: 0}
+    - _dark: {r: 1, g: 1, b: 1, a: 0}
+    - _light: {r: 0.7735849, g: 0.5230212, b: 0.5230212, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4738458275243543288
 MonoBehaviour:
