@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
   m_Name: AMeatBallSoup
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5875697587690727071, guid: 11ffa5f031c823f48bc09d726639244d, type: 3}
+  prefab: {fileID: 5875697587690727071, guid: 0e3bca4fbf028b44eb84725c9b1e0811, type: 3}
   sprite: {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
   objectName: MeatBallSoup
   value: 5
