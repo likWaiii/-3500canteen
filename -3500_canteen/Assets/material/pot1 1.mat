@@ -13,6 +13,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 0
+--- !u!114 &-3242322256195614727
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -20,7 +33,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: box1
+  m_Name: pot1 1
   m_Shader: {fileID: -6465566751694194690, guid: af6c00b168ad22e4389e5686eea87c10, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -81,7 +94,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: 614d63c4adc71cb4181bbb7b718a4cc0, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -154,7 +167,7 @@ Material:
     - _UnityShadowSharpness: 1
     - _VertexColorsEnabled: 0
     - _ZWrite: 1
-    - _shadowsize: 0.52
+    - _shadowsize: 0.24
     - _speed: 0.1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -163,28 +176,15 @@ Material:
     - _ColorDimExtra: {r: 0.64779866, g: 0.48686752, b: 0.48686752, a: 1}
     - _ColorDimSteps: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
     - _ColorGradient: {r: 0.5637772, g: 0.52812386, b: 0.8113208, a: 1}
-    - _Color_1: {r: 0.7497244, g: 0.7610062, b: 0.6820338, a: 0}
-    - _Color_2: {r: 0.79559743, g: 0.91947776, b: 1, a: 0}
+    - _Color_1: {r: 0.64969724, g: 0.7371295, b: 0.91823894, a: 0}
+    - _Color_2: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FlatRimColor: {r: 1, g: 1, b: 1, a: 1}
     - _FlatSpecularColor: {r: 0.45911938, g: 0.25554752, b: 0.25554752, a: 1}
     - _LightmapDirection: {r: 0, g: 1, b: 0, a: 0}
     - _UnityShadowColor: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
-    - _down: {r: 1, g: 1, b: 1, a: 0}
-    - _light: {r: 0.79559743, g: 0.9577037, b: 1, a: 0}
-    - _shadow: {r: 0.899371, g: 0.65263677, b: 0.55715746, a: 0}
-    - _up: {r: 0.6886792, g: 0.9159668, b: 1, a: 0}
+    - _down: {r: 0.27510774, g: 0.48510867, b: 0.81761, a: 0}
+    - _light: {r: 0.72554475, g: 0.8930427, b: 0.91194963, a: 0}
+    - _shadow: {r: 1, g: 1, b: 1, a: 0}
+    - _up: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
---- !u!114 &8685841180333577374
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 7

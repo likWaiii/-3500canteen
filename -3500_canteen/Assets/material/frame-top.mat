@@ -167,6 +167,7 @@ Material:
     - _UnityShadowSharpness: 1
     - _VertexColorsEnabled: 0
     - _ZWrite: 1
+    - _shadowsize: 0.41
     - _speed: 0.1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
@@ -184,5 +185,6 @@ Material:
     - _UnityShadowColor: {r: 0.85023, g: 0.85034, b: 0.85045, a: 0.85056}
     - _down: {r: 0.76415086, g: 0.8851552, b: 1, a: 0}
     - _light: {r: 0.7012578, g: 0.89340144, b: 1, a: 0}
+    - _shadow: {r: 0.4806771, g: 0.6065226, b: 0.70440245, a: 0}
     - _up: {r: 0.89622635, g: 0.98175, b: 1, a: 0}
   m_BuildTextureStacks: []
