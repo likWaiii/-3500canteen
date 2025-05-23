@@ -40,6 +40,13 @@
 //     private int successfulRecipesAmount;
 //     private int totalEarnedValue = 0;
 
+//     // 要胜利的目标分数
+//     [SerializeField]
+//     private int scoreThreshold = 1;
+
+//     // 游戏是否已经结束（只在 Server 端判断）
+//     private bool isGameEnded = false;
+
 //     private void Awake()
 //     {
 //         if (Instance != null && Instance != this)
@@ -133,6 +140,12 @@
 //     [ServerRpc(RequireOwnership = false)]
 //     public void SpawnRecipeServerRpc()
 //     {
+//         if (isGameEnded)
+//         {
+//             Debug.Log("[DeliveryManager] 游戏已结束，不再生成新订单");
+//             return; // 游戏结束后不再刷单
+//         }
+
 //         spawnRecipeTimer = spawnRecipeTimerMax;
 
 //         if (KitchenGameManager.Instance.IsGamePlaying() && HasEmptySlot())
@@ -304,6 +317,21 @@
 //             Debug.Log(
 //                 $"[DeliveryManager] 订单完成：clientId={clientId}, 得分={playerScores[clientId]}"
 //             );
+
+//             Debug.Log(
+//                 $"[DeliveryManager] 检查结束条件，clientId={clientId}, 当前分数 = {playerScores[clientId]}, 阈值 = {scoreThreshold}，isGameEnded = {isGameEnded}"
+//             );
+//             // 检查是否达到结束阈值
+//             if (!isGameEnded && playerScores[clientId] >= scoreThreshold)
+//             {
+//                 isGameEnded = true;
+//                 Debug.Log(
+//                     $"[DeliveryManager] 游戏结束，玩家 {clientId} 达到分数阈值 {scoreThreshold}"
+//                 );
+//                 EndGameClientRpc(clientId);
+//                 return;
+//             }
+
 //             StartCoroutine(DelayRemoveCompletedOrder(slotIndex, 2f));
 //         }
 //         else
@@ -348,6 +376,12 @@
 //         if (!IsServer)
 //             return;
 
+//         if (isGameEnded)
+//         {
+//             Debug.Log("[DeliveryManager] 游戏已结束，不再更新订单");
+//             return; // 游戏结束后不再动
+//         }
+
 //         spawnRecipeTimer -= Time.deltaTime;
 
 //         if (spawnRecipeTimer <= 0f)
@@ -364,6 +398,7 @@
 
 //                 if (waitingRecipeList[i].remainingTime <= 0f)
 //                 {
+//                     Debug.Log($"[DeliveryManager] 订单 {i} 超时！触发 OnRecipeFailed 事件。");
 //                     waitingRecipeList[i].remainingTime = 0f;
 //                     OnRecipeFailed?.Invoke(this, EventArgs.Empty);
 //                     StartCoroutine(DelayRemoveCompletedOrder(i, 2f));
@@ -485,8 +520,22 @@
 
 //         OnRecipeFailed?.Invoke(this, EventArgs.Empty);
 //     }
-// }
 
+//     /// <summary>
+//     /// 通知所有端：clientId 赢了，其他人都输
+//     /// </summary>
+//     [ClientRpc]
+//     private void EndGameClientRpc(ulong winningClientId)
+//     {
+//         bool isLocalWinner = NetworkManager.Singleton.LocalClientId == winningClientId;
+//         // Debug.Log($"[DeliveryManager] EndGameClientRpc: 本地玩家赢？{isLocalWinner}");
+//         Debug.Log(
+//             $"[DeliveryManager] 收到 EndGameClientRpc，winnerId={winningClientId}，本地 clientId={NetworkManager.Singleton.LocalClientId}"
+//         );
+//         // 调用你已有的 GameOver 接口
+//         KitchenGameManager.Instance.GameOver(isLocalWinner);
+//     }
+// }
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -529,59 +578,42 @@ public class DeliveryManager : NetworkBehaviour
     private int successfulRecipesAmount;
     private int totalEarnedValue = 0;
 
-    // 要胜利的目标分数
     [SerializeField]
-    private int scoreThreshold = 1;
-
-    // 游戏是否已经结束（只在 Server 端判断）
+    private int scoreThreshold = 0;
     private bool isGameEnded = false;
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("[DeliveryManager] 检测到重复实例，销毁当前实例");
+            Debug.LogWarning("[DeliveryManager] 检测到重复实例，销毁当前实例 (Awake)");
             Destroy(gameObject);
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject); // 如果需要跨场景保留
         waitingRecipeList = new List<WaitingRecipe>(new WaitingRecipe[waitingRecipeMax]);
         spawnRecipeTimer = spawnRecipeTimerMax;
-        Debug.Log("[DeliveryManager] 初始化完成");
+        Debug.Log("[DeliveryManager] 初始化完成 (Awake)");
     }
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log(
-            $"[DeliveryManager] OnNetworkSpawn for Instance {GetInstanceID()}. IsServer={IsServer}, IsClient={IsClient}"
-        );
-
-        // 确保单例逻辑正确
+        base.OnNetworkSpawn();
         if (IsServer)
         {
-            if (Instance != null && Instance != this)
-            {
-                Debug.LogWarning("[DeliveryManager] 服务器端检测到重复实例，销毁当前实例");
-                Destroy(gameObject);
-            }
-            else
-            {
-                Instance = this;
-            }
+            Instance = this; // 服务器端确保 Instance 是权威实例
+            Debug.Log("[DeliveryManager] OnNetworkSpawn 在服务器端设置 Instance");
         }
-        else
+        Debug.Log($"[DeliveryManager] OnNetworkSpawn: IsServer={IsServer}, IsClient={IsClient}");
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Debug.LogWarning("[DeliveryManager] 客户端检测到重复实例，销毁当前实例");
-                Destroy(gameObject);
-            }
+            Instance = null;
         }
+        Debug.Log($"[DeliveryManager] {gameObject.name} 被销毁。");
     }
 
     [ClientRpc]
@@ -598,8 +630,6 @@ public class DeliveryManager : NetworkBehaviour
             return;
         }
         wr.submittedDict[kitchenObject] = newCount;
-
-        // 触发 UI 刷新
         OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
     }
 
@@ -622,7 +652,7 @@ public class DeliveryManager : NetworkBehaviour
         if (waitingRecipeList[slotIndex] != null)
         {
             waitingRecipeList[slotIndex].isCompleted = isCompleted;
-            OnRecipeSpawned?.Invoke(this, EventArgs.Empty); // 刷新 UI
+            OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -632,7 +662,7 @@ public class DeliveryManager : NetworkBehaviour
         if (isGameEnded)
         {
             Debug.Log("[DeliveryManager] 游戏已结束，不再生成新订单");
-            return; // 游戏结束后不再刷单
+            return;
         }
 
         spawnRecipeTimer = spawnRecipeTimerMax;
@@ -796,7 +826,6 @@ public class DeliveryManager : NetworkBehaviour
 
             UpdateRecipeStatusClientRpc(slotIndex, true);
 
-            // 只给提交者发 RPC
             var rpcParams = new ClientRpcParams
             {
                 Send = new ClientRpcSendParams { TargetClientIds = new ulong[] { clientId } },
@@ -810,7 +839,6 @@ public class DeliveryManager : NetworkBehaviour
             Debug.Log(
                 $"[DeliveryManager] 检查结束条件，clientId={clientId}, 当前分数 = {playerScores[clientId]}, 阈值 = {scoreThreshold}，isGameEnded = {isGameEnded}"
             );
-            // 检查是否达到结束阈值
             if (!isGameEnded && playerScores[clientId] >= scoreThreshold)
             {
                 isGameEnded = true;
@@ -833,10 +861,8 @@ public class DeliveryManager : NetworkBehaviour
     private void UpdatePlayerScoreClientRpc(int newScore, ClientRpcParams rpcParams = default)
     {
         Debug.Log($"[DeliveryManager] 客户端收到 UpdatePlayerScoreClientRpc：newScore={newScore}");
-
         ulong localClientId = NetworkManager.Singleton.LocalClientId;
         playerScores[localClientId] = newScore;
-
         OnScoreUpdated?.Invoke(this, newScore);
     }
 
@@ -868,7 +894,7 @@ public class DeliveryManager : NetworkBehaviour
         if (isGameEnded)
         {
             Debug.Log("[DeliveryManager] 游戏已结束，不再更新订单");
-            return; // 游戏结束后不再动
+            return;
         }
 
         spawnRecipeTimer -= Time.deltaTime;
@@ -885,10 +911,14 @@ public class DeliveryManager : NetworkBehaviour
             {
                 waitingRecipeList[i].remainingTime -= Time.deltaTime;
 
-                if (waitingRecipeList[i].remainingTime <= 0f)
+                if (
+                    waitingRecipeList[i].remainingTime <= 0f
+                    && waitingRecipeList[i].remainingTime > -Time.deltaTime
+                )
                 {
+                    Debug.Log($"[DeliveryManager] 订单 {i} 超时！触发 OnRecipeFailed 事件。");
                     waitingRecipeList[i].remainingTime = 0f;
-                    OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+                    OnRecipeFailed?.Invoke(this, EventArgs.Empty); // 只触发一次
                     StartCoroutine(DelayRemoveCompletedOrder(i, 2f));
                 }
 
@@ -912,9 +942,7 @@ public class DeliveryManager : NetworkBehaviour
         bool hasSlot = HasEmptySlot();
 
         if (!playing || !hasSlot)
-        {
             return;
-        }
 
         int recipeIndex = UnityEngine.Random.Range(0, recipeListSO.recipeSOList.Count);
         var so = recipeListSO.recipeSOList[recipeIndex];
@@ -926,9 +954,7 @@ public class DeliveryManager : NetworkBehaviour
                 empty.Add(i);
 
         if (empty.Count == 0)
-        {
             return;
-        }
 
         int slot = empty[UnityEngine.Random.Range(0, empty.Count)];
         waitingRecipeList[slot] = newWaiting;
@@ -1009,18 +1035,13 @@ public class DeliveryManager : NetworkBehaviour
         OnRecipeFailed?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>
-    /// 通知所有端：clientId 赢了，其他人都输
-    /// </summary>
     [ClientRpc]
     private void EndGameClientRpc(ulong winningClientId)
     {
         bool isLocalWinner = NetworkManager.Singleton.LocalClientId == winningClientId;
-        // Debug.Log($"[DeliveryManager] EndGameClientRpc: 本地玩家赢？{isLocalWinner}");
         Debug.Log(
             $"[DeliveryManager] 收到 EndGameClientRpc，winnerId={winningClientId}，本地 clientId={NetworkManager.Singleton.LocalClientId}"
         );
-        // 调用你已有的 GameOver 接口
         KitchenGameManager.Instance.GameOver(isLocalWinner);
     }
 }
