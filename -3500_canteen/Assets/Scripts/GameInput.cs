@@ -48,7 +48,7 @@ public class GameInput : MonoBehaviour
 
     private void OnDestroy()
     {
-        playerInputActions.Player.Interact.performed -= Interact_performed;
+        //playerInputActions.Player.Interact.performed -= Interact_performed;
         playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
         playerInputActions.Player.Pause.performed -= Pause_performed;
 

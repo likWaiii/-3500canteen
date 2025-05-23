@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086b10ea4db496d42b1f0015550882ad, type: 3}
   m_Name: Tomato-TomatoSlices
   m_EditorClassIdentifier: 
-  input: {fileID: 11400000, guid: 16828b1fa428bfb439695dc2d01a3302, type: 2}
-  output: {fileID: 11400000, guid: 9351b1e6c7374b04cb4209fb1a53d775, type: 2}
+  input: {fileID: 11400000, guid: 921d903e040e6024282c18c128181185, type: 2}
+  output: {fileID: 11400000, guid: 377695d6ef12729478b7034f5c9f4a18, type: 2}
   cuttingPogressMax: 3
