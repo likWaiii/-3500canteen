@@ -26,6 +26,7 @@ public class DeliveryManagerSingleUI : MonoBehaviour
     private void Awake()
     {
         iconTemplate.gameObject.SetActive(false);
+        customerImage.enabled = false;
     }
 
     public void SetWaitingRecipe(WaitingRecipe waitingRecipe)
@@ -81,6 +82,7 @@ public class DeliveryManagerSingleUI : MonoBehaviour
 
         // 初始表情
         customerImage.sprite = recipeSO.calmSprite;
+        customerImage.enabled = true;
     }
 
     public void ClearUI()
@@ -95,6 +97,7 @@ public class DeliveryManagerSingleUI : MonoBehaviour
 
         timeSlider.value = 0f;
         customerImage.sprite = null;
+        customerImage.enabled = false;
         currentWaitingRecipe = null;
     }
 
