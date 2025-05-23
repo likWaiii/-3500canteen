@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recipeListSO: {fileID: 11400000, guid: ca9209ea94e536c4ab68bc0c788e3921, type: 2}
+  scoreThreshold: 0
 --- !u!114 &8668416082907318363
 MonoBehaviour:
   m_ObjectHideFlags: 0
