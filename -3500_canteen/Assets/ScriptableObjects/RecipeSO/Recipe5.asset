@@ -10,15 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7dccc656cc1a9dc41a963bb0ef05aa8a, type: 3}
-  m_Name: MEGAburger
+  m_Name: Recipe5
   m_EditorClassIdentifier: 
   kitchenObjectsOSList:
-  - {fileID: 11400000, guid: 33f0ba7e88e764144a75a7d4d58a132f, type: 2}
-  - {fileID: 11400000, guid: 756a2548d6744cf4cb2365655bbaa1fe, type: 2}
-  - {fileID: 11400000, guid: e601fa4be9d60ef4da23653744f92097, type: 2}
-  - {fileID: 11400000, guid: 92b7b3ee2763f0740a2babf7ddda49d7, type: 2}
-  - {fileID: 11400000, guid: 9351b1e6c7374b04cb4209fb1a53d775, type: 2}
-  recipeName: "\u5DE8\u65E0\u9738\u6C49\u5821"
+  - {fileID: 11400000, guid: cada50f6abef4b7458d9ed7e07869206, type: 2}
+  - {fileID: 11400000, guid: efafb5ad9ec5f6d43a4cab59f4564f48, type: 2}
+  recipeName: Recipe5
   maxTime: 30
   calmSprite: {fileID: 21300000, guid: f51045a25148c09479e9f353f88423c1, type: 3}
   happySprite: {fileID: 21300000, guid: a90b6ae14e5adbc46886275486cdc850, type: 3}

@@ -15,4 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 5875697587690727071, guid: 58c3ac3d31b3b2f438a0457fab1ae9f0, type: 3}
   sprite: {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
   objectName: BreadSoup
-  value: 5
+  value: 120
