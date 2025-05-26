@@ -6,35 +6,40 @@ using UnityEngine.UI;
 
 public class DeliveryManagerSingleUI : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI recipeNameText;
+    [SerializeField] private TextMeshProUGUI recipeNameText;
+    [SerializeField] private Transform iconContainer;
+    [SerializeField] private Transform iconTemplate;
+    [SerializeField] private Slider timeSlider;
 
-    [SerializeField]
-    private Transform iconContainer;
-
-    [SerializeField]
-    private Transform iconTemplate;
-
-    [SerializeField]
-    private Slider timeSlider;
-
-    [SerializeField]
-    private Image customerImage;
+    [Header("顾客表情图像")]
+    [SerializeField] private Image customerImage; // calm 表情
+    [SerializeField] private Image exitEffectImage; // happy/angry 表情
 
     private WaitingRecipe currentWaitingRecipe;
+    private CanvasGroup customerCanvasGroup;
+    private CanvasGroup exitEffectCanvasGroup;
+    private Vector2 originalPosition;
+    private Vector2 enterOffset = new Vector2(0, -80);
+    private Vector2 exitOffset = new Vector2(0, -100);
+    private bool isAnimating = false;
 
     private void Awake()
     {
         iconTemplate.gameObject.SetActive(false);
+        customerCanvasGroup = customerImage.GetComponent<CanvasGroup>();
+        exitEffectCanvasGroup = exitEffectImage.GetComponent<CanvasGroup>();
+        originalPosition = customerImage.rectTransform.anchoredPosition;
+
         customerImage.enabled = false;
+        exitEffectImage.enabled = false;
     }
 
     public void SetWaitingRecipe(WaitingRecipe waitingRecipe)
     {
+        if (currentWaitingRecipe == waitingRecipe) return;
         currentWaitingRecipe = waitingRecipe;
         RecipeSO recipeSO = currentWaitingRecipe.recipeSO;
 
-        // 计算总价值
         int totalValue = 0;
         foreach (KitchenObjectOS kitchenObject in recipeSO.kitchenObjectsOSList)
         {
@@ -42,37 +47,27 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         }
         recipeNameText.text = "价值：" + totalValue;
 
-        // 清除旧图标
         foreach (Transform child in iconContainer)
         {
-            if (child == iconTemplate)
-                continue;
+            if (child == iconTemplate) continue;
             Destroy(child.gameObject);
         }
 
-        // 按对象引用统计提交数量
         Dictionary<KitchenObjectOS, int> remainingSubmission = new Dictionary<KitchenObjectOS, int>(
-            waitingRecipe.submittedDict,
-            new KitchenObjectOSComparer()
+            waitingRecipe.submittedDict, new KitchenObjectOSComparer()
         );
 
-        // 从左到右生成图标
         foreach (KitchenObjectOS kitchenObjectOS in recipeSO.kitchenObjectsOSList)
         {
             Transform iconTransform = Instantiate(iconTemplate, iconContainer);
             iconTransform.gameObject.SetActive(true);
-
             Image iconImage = iconTransform.GetComponent<Image>();
             iconImage.sprite = kitchenObjectOS.sprite;
 
-            // 判断是否还有未消耗的提交数量
-            if (
-                remainingSubmission.ContainsKey(kitchenObjectOS)
-                && remainingSubmission[kitchenObjectOS] > 0
-            )
+            if (remainingSubmission.ContainsKey(kitchenObjectOS) && remainingSubmission[kitchenObjectOS] > 0)
             {
                 iconImage.color = Color.gray;
-                remainingSubmission[kitchenObjectOS]--; // 消耗一次
+                remainingSubmission[kitchenObjectOS]--;
             }
             else
             {
@@ -80,9 +75,34 @@ public class DeliveryManagerSingleUI : MonoBehaviour
             }
         }
 
-        // 初始表情
-        customerImage.sprite = recipeSO.calmSprite;
+        // 播放 calm 滑入动画
+        StartCoroutine(PlayEnterAnimation(recipeSO.calmSprite));
+    }
+
+    private IEnumerator PlayEnterAnimation(Sprite calmSprite)
+    {
+        customerImage.sprite = calmSprite;
         customerImage.enabled = true;
+        customerCanvasGroup.alpha = 0f;
+
+        Vector2 startPos = originalPosition + enterOffset;
+        Vector2 endPos = originalPosition;
+        float duration = 0.5f;
+        float elapsed = 0f;
+
+        customerImage.rectTransform.anchoredPosition = startPos;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            customerImage.rectTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+            customerCanvasGroup.alpha = t;
+            yield return null;
+        }
+
+        customerCanvasGroup.alpha = 1f;
+        customerImage.rectTransform.anchoredPosition = endPos;
     }
 
     public void ClearUI()
@@ -90,45 +110,67 @@ public class DeliveryManagerSingleUI : MonoBehaviour
         recipeNameText.text = "";
         foreach (Transform child in iconContainer)
         {
-            if (child == iconTemplate)
-                continue;
+            if (child == iconTemplate) continue;
             Destroy(child.gameObject);
         }
 
         timeSlider.value = 0f;
-        customerImage.sprite = null;
         customerImage.enabled = false;
+        customerImage.sprite = null;
+        exitEffectImage.enabled = false;
         currentWaitingRecipe = null;
+
+        customerCanvasGroup.alpha = 1f;
+        customerImage.rectTransform.anchoredPosition = originalPosition;
+        exitEffectCanvasGroup.alpha = 1f;
+        isAnimating = false;
     }
 
     private void Update()
     {
-        if (currentWaitingRecipe == null)
-            return;
+        if (currentWaitingRecipe == null || isAnimating) return;
 
-        // 更新时间进度条
         float remaining = currentWaitingRecipe.remainingTime;
         float max = currentWaitingRecipe.recipeSO.maxTime;
         timeSlider.value = remaining / max;
 
-        // 如果订单完成或失败，显示不同表情
         if (currentWaitingRecipe.isCompleted)
         {
-            customerImage.sprite = currentWaitingRecipe.recipeSO.happySprite;
-            // 延迟清理 UI
-            StartCoroutine(DelayClearUI(2f)); // 2 秒后清理 UI
+            StartCoroutine(PlayExitAnimation(currentWaitingRecipe.recipeSO.happySprite));
+            isAnimating = true;
         }
         else if (remaining <= 0f)
         {
-            customerImage.sprite = currentWaitingRecipe.recipeSO.angrySprite;
-            // 延迟清理 UI
-            StartCoroutine(DelayClearUI(2f)); // 2 秒后清理 UI
+            StartCoroutine(PlayExitAnimation(currentWaitingRecipe.recipeSO.angrySprite));
+            isAnimating = true;
         }
     }
 
-    private IEnumerator DelayClearUI(float delay)
+    private IEnumerator PlayExitAnimation(Sprite exitSprite)
     {
-        yield return new WaitForSeconds(delay);
-        ClearUI(); // 清理 UI
+        customerImage.enabled = false;
+
+        exitEffectImage.sprite = exitSprite;
+        exitEffectImage.enabled = true;
+        exitEffectCanvasGroup.alpha = 1f;
+
+        Vector2 startPos = originalPosition;
+        Vector2 endPos = originalPosition + exitOffset;
+        exitEffectImage.rectTransform.anchoredPosition = startPos;
+
+        float duration = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            exitEffectImage.rectTransform.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+            exitEffectCanvasGroup.alpha = 1f - t;
+            yield return null;
+        }
+
+        exitEffectImage.enabled = false;
+        ClearUI();
     }
 }

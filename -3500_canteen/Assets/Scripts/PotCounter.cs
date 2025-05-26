@@ -202,6 +202,15 @@ public class PotCounter : BaseCounter, IHasProgress
             {
                 //Player is not carring something
                 GetKitchenObject().SetKitchenObjectParent(player);
+
+                state = State.Idle;
+
+                OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
+
+                OnProgressChanged?.Invoke(
+                    this,
+                    new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f }
+                );
             }
         }
     }
