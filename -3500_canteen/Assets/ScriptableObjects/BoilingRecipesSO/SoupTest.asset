@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d900ae9a663e66b45b1e855d0a7100a2, type: 3}
+  m_Name: SoupTest
+  m_EditorClassIdentifier: 
+  input:
+  - {fileID: 11400000, guid: f6b04ae595b3d92479c7208f647a3ceb, type: 2}
+  - {fileID: 11400000, guid: 921d903e040e6024282c18c128181185, type: 2}
+  - {fileID: 11400000, guid: 29dd003be4b63264398356ed9635bbbf, type: 2}
+  output: {fileID: 11400000, guid: 2ee8e84463ef4964ab898b2f4003a3a3, type: 2}
+  boilingTimerMax: 5
