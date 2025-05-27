@@ -358,4 +358,11 @@ public class KitchenGameManager : NetworkBehaviour
         }
     }
 
+    public void SetPausedExternally()
+    {
+        isGamePaused = true;
+        OnGamePaused?.Invoke(this, EventArgs.Empty);
+    }
+
+
 }
