@@ -227,7 +227,7 @@ public class KitchenGameManager : NetworkBehaviour
         }
     }
 
-    private void Start()
+    /*private void Start()
     {
         GameInput.Instance.OnPauseActions += GameInput_OnPauseActions;
         GameInput.Instance.OnInteractActions += GameInput_OnInteractActions;
@@ -237,7 +237,25 @@ public class KitchenGameManager : NetworkBehaviour
             state = State.CountdownToStart;
             OnStateChanged?.Invoke(this, EventArgs.Empty);
         }
+    }*/
+    private void Start()
+    {
+        GameInput.Instance.OnPauseActions += GameInput_OnPauseActions;
+        GameInput.Instance.OnInteractActions += GameInput_OnInteractActions;
+
+        if (state == State.WaitingToStart)
+        {
+            StartCoroutine(DelayedStartCountdown());
+        }
     }
+
+    private IEnumerator DelayedStartCountdown()
+{
+    yield return new WaitForSeconds(1f); // 可调节的延迟时间
+    state = State.CountdownToStart;
+    OnStateChanged?.Invoke(this, EventArgs.Empty);
+}
+
 
     private void GameInput_OnInteractActions(object sender, EventArgs e)
     {
@@ -328,15 +346,16 @@ public class KitchenGameManager : NetworkBehaviour
     {
         isGamePaused = !isGamePaused;
 
+        // 不再改变 Time.timeScale，让游戏继续运行
+
         if (isGamePaused)
         {
-            Time.timeScale = 0f;
             OnGamePaused?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            Time.timeScale = 1f;
             OnGameUnpaused?.Invoke(this, EventArgs.Empty);
         }
     }
+
 }

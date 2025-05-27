@@ -1,30 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TestingNetworkUI : MonoBehaviour
 {
-    [SerializeField]
-    private Button StartHostButton;
-
-    [SerializeField]
-    private Button StartClientButton;
+    [SerializeField] private Button StartHostButton;
+    [SerializeField] private Button StartClientButton;
+    [SerializeField] private GameStartCountdownUI countdownUI;
 
     private void Awake()
     {
         StartHostButton.onClick.AddListener(() =>
         {
-            Debug.Log("Starting Host");
             NetworkManager.Singleton.StartHost();
+
+            if (countdownUI != null)
+            {
+                countdownUI.gameObject.SetActive(true); // ¼¤»î UI GameObject
+                countdownUI.Initialize(); // ÑÓ³Ù¼àÌý×´Ì¬±ä»¯
+            }
+
             Hide();
         });
 
         StartClientButton.onClick.AddListener(() =>
         {
-            Debug.Log("Starting Client");
             NetworkManager.Singleton.StartClient();
+
+            if (countdownUI != null)
+            {
+                countdownUI.gameObject.SetActive(true);
+                countdownUI.Initialize();
+            }
+
             Hide();
         });
     }

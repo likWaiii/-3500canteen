@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -7,23 +6,36 @@ public class GameStartCountdownUI : MonoBehaviour
 {
     private const string NUMBER_POPUP = "NumberPOPup";
 
-    [SerializeField]
-    private TextMeshProUGUI countdownText;
+    [SerializeField] private TextMeshProUGUI countdownText;
 
     private Animator animator;
-
-    private int previousCountDownNumber;
+    private int previousCountDownNumber;//= -1;
+    //private float lastAnimationTime = -10f;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        Hide();
+        enabled = false; // 禁止 Update 循环，等初始化后再启用
     }
 
-    public void Start()
+    public void Initialize()
     {
+        StartCoroutine(WaitForKitchenGameManagerAndStart());
+    }
+
+    private IEnumerator WaitForKitchenGameManagerAndStart()
+    {
+        yield return new WaitUntil(() => KitchenGameManager.Instance != null);
+
         KitchenGameManager.Instance.OnStateChanged += KitchenManager_OnStateChanged;
 
-        Hide();
+        enabled = true; // 开启 Update 循环
+
+        if (KitchenGameManager.Instance.IsCountToStartActive())
+        {
+            Show();
+        }
     }
 
     private void KitchenManager_OnStateChanged(object sender, System.EventArgs e)
@@ -40,18 +52,55 @@ public class GameStartCountdownUI : MonoBehaviour
 
     private void Update()
     {
-        int countdownNummber = Mathf.CeilToInt(
-            KitchenGameManager.Instance.GetCountdownToStartTimer()
-        );
-        countdownText.text = countdownNummber.ToString();
+        if (KitchenGameManager.Instance == null) return;
 
-        if (previousCountDownNumber != countdownNummber)
+        int countdownNumber = Mathf.CeilToInt(KitchenGameManager.Instance.GetCountdownToStartTimer());
+        countdownText.text = countdownNumber.ToString();
+
+        if (previousCountDownNumber != countdownNumber)
         {
-            previousCountDownNumber = countdownNummber;
-            animator.SetTrigger(NUMBER_POPUP);
-            SoundManager.Instance.PlayCountDownSound();
+            previousCountDownNumber = countdownNumber;
+
+            if (animator != null)
+            {
+                animator.SetTrigger(NUMBER_POPUP);
+            }
+
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.PlayCountDownSound();
+            }
         }
     }
+
+   
+
+    /*private void Update()
+    {
+        if (KitchenGameManager.Instance == null) return;
+
+        float timer = KitchenGameManager.Instance.GetCountdownToStartTimer();
+        int countdownNumber = Mathf.CeilToInt(timer);
+
+        // 仅在数字发生变化时更新 UI
+        if (countdownNumber != previousCountDownNumber)
+        {
+            previousCountDownNumber = countdownNumber;
+            countdownText.text = countdownNumber.ToString();
+
+            // 控制动画和音效播放间隔，防止重叠或连发
+            if (Time.time - lastAnimationTime >= 0.8f)
+            {
+                lastAnimationTime = Time.time;
+
+                if (animator != null)
+                    animator.SetTrigger(NUMBER_POPUP);
+
+                if (SoundManager.Instance != null)
+                    SoundManager.Instance.PlayCountDownSound();
+            }
+        }
+    }*/
 
     private void Hide()
     {
