@@ -154,6 +154,12 @@
 //         }
 //     }
 // }
+
+
+
+
+
+
 // using System;
 // using System.Collections;
 // using System.Collections.Generic;
@@ -523,11 +529,28 @@ public class KitchenGameManager : NetworkBehaviour
         }
     }
 
+    // public void GameOver(bool playerWon)
+    // {
+    //     if (!IsServer)
+    //         return;
+    //     state.Value = State.GameOver;
+    // }
+
     public void GameOver(bool playerWon)
     {
-        if (!IsServer)
-            return;
         state.Value = State.GameOver;
+        
+        Debug.Log("调用 GameOver，胜利？" + playerWon);
+        Time.timeScale = 0f;
+
+        if (EndGameUI.Instance != null)
+        {
+            EndGameUI.Instance.ShowResult(playerWon);
+        }
+        else
+        {
+            Debug.LogError("找不到 EndGameUI.Instance，请确认场景中已挂载 EndGameUI 脚本！");
+        }
     }
 
     public bool IsGamePlaying() => state.Value == State.GamePlaying;

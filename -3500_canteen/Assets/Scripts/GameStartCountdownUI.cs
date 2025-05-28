@@ -144,6 +144,7 @@ public class GameStartCountdownUI : MonoBehaviour
     {
         yield return new WaitUntil(() => KitchenGameManager.Instance != null);
         KitchenGameManager.Instance.OnStateChangedLocal += KitchenManager_OnStateChanged;
+        // KitchenGameManager.Instance.OnStateChanged += KitchenManager_OnStateChanged;
         enabled = true;
         if (KitchenGameManager.Instance.IsCountToStartActive())
         {
@@ -156,6 +157,7 @@ public class GameStartCountdownUI : MonoBehaviour
         if (KitchenGameManager.Instance != null)
         {
             KitchenGameManager.Instance.OnStateChangedLocal -= KitchenManager_OnStateChanged;
+            // KitchenGameManager.Instance.OnStateChanged -= KitchenManager_OnStateChanged;
         }
     }
 
