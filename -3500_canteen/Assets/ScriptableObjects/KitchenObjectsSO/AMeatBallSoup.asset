@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: AMeatBallSoup
   m_EditorClassIdentifier: 
   prefab: {fileID: 5875697587690727071, guid: 0e3bca4fbf028b44eb84725c9b1e0811, type: 3}
-  sprite: {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
+  sprite: {fileID: 1809426085, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
   objectName: MeatBallSoup
   value: 200

@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
-  m_Name: Bread
+  m_Script: {fileID: 11500000, guid: ae262cd86961c2045888dfc0c638bd68, type: 3}
+  m_Name: Maffin2_Maffin3
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5875697587690727071, guid: 11ffa5f031c823f48bc09d726639244d, type: 3}
-  sprite: {fileID: -519290370, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
-  objectName: Bread
-  value: 5
+  input: {fileID: 11400000, guid: 74388abf4b923f24b92614ef2a5059ed, type: 2}
+  output: {fileID: 11400000, guid: f6bfcb9fbaa421a4095110f36dc9d1cb, type: 2}
+  fryingTimerMax: 4
