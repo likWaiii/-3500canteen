@@ -81,6 +81,7 @@ public class DeliveryManagerSingleUI : MonoBehaviour
 
     private IEnumerator PlayEnterAnimation(Sprite calmSprite)
     {
+        Debug.Log("EnterAnimation 开始");
         customerImage.sprite = calmSprite;
         customerImage.enabled = true;
         customerCanvasGroup.alpha = 0f;
