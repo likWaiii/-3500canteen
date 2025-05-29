@@ -459,24 +459,31 @@ public class DeliveryManager : NetworkBehaviour
         return totalEarnedValue;
     }
 
-    public void DeliverRecipe(PlateKitchenObject plateKitchenObject)
+    public void DeliverRecipe(KitchenObject kitchenObject)
     {
+        Debug.Log($"[DeliveryManager] 尝试交付菜品：{kitchenObject.GetKitchenObjectOS().objectName}");
         for (int i = 0; i < waitingRecipeList.Count; i++)
         {
+            Debug.Log(
+                $"[DeliveryManager] 检查订单槽 {i}"
+            );
             WaitingRecipe wr = waitingRecipeList[i];
             if (wr == null || wr.isCompleted)
                 continue;
 
             RecipeSO waitingRecipeSO = wr.recipeSO;
-            var plateList = plateKitchenObject.GetKitchenObjectOSList();
-            if (waitingRecipeSO.kitchenObjectsOSList.Count != plateList.Count)
-                continue;
 
             bool matches = true;
             foreach (var recipeObj in waitingRecipeSO.kitchenObjectsOSList)
             {
-                if (!plateList.Contains(recipeObj))
+                Debug.Log(
+                    $"[DeliveryManager] 检查菜品：{recipeObj.objectName} (需要) vs {kitchenObject.GetKitchenObjectOS().objectName} (提交)"
+                );
+                if (!recipeObj.Equals(kitchenObject))
                 {
+                    Debug.Log(
+                        $"[DeliveryManager] 菜品不匹配：{recipeObj.objectName} != {kitchenObject.GetKitchenObjectOS().objectName}"
+                    );
                     matches = false;
                     break;
                 }
