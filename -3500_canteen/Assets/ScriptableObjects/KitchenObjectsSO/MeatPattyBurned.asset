@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
   m_Name: MeatPattyBurned
   m_EditorClassIdentifier: 
-  prefab: {fileID: 1269569767325896964, guid: 1327c1c2d9528c545b3f44aba5c83e92, type: 3}
+  prefab: {fileID: 5875697587690727071, guid: 6223aa42ac908844aa528aa71f754fdb, type: 3}
   sprite: {fileID: 21300000, guid: 713ea9afa60dd6e4ebf6503a33e8cc99, type: 3}
   objectName: MeatPattyBurned
+  value: 0
