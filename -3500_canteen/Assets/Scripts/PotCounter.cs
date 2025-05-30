@@ -16,6 +16,7 @@ public class PotCounter : BaseCounter, IHasProgress
     {
         public State state;
     }
+
     public enum State
     {
         Idle,
@@ -26,8 +27,11 @@ public class PotCounter : BaseCounter, IHasProgress
 
     private State state;
 
-    [SerializeField] private BoilingReciepeSO[] boilKitchenObjectOSArray;
-    [SerializeField] private BurningReciepeSO[] burningReciepeSOArray;
+    [SerializeField]
+    private BoilingReciepeSO[] boilKitchenObjectOSArray;
+
+    [SerializeField]
+    private BurningReciepeSO[] burningReciepeSOArray;
 
     private int cnt = 0;
     private KitchenObjectOS[] inputKitchenObjectSOList;
@@ -38,6 +42,7 @@ public class PotCounter : BaseCounter, IHasProgress
 
     private float boilingTimer;
     private float burnedTimer;
+
     private void Awake()
     {
         Clear();
@@ -56,7 +61,8 @@ public class PotCounter : BaseCounter, IHasProgress
             {
                 if (isObjGiven == null)
                 {
-                    isObjGiven = new Dictionary<BoilingReciepeSO, Dictionary<KitchenObjectOS, bool>>();
+                    isObjGiven =
+                        new Dictionary<BoilingReciepeSO, Dictionary<KitchenObjectOS, bool>>();
                 }
                 if (!isObjGiven.ContainsKey(_boilingReciepeSO))
                 {
@@ -76,7 +82,6 @@ public class PotCounter : BaseCounter, IHasProgress
         {
             switch (state)
             {
-
                 case State.Idle:
                     break;
 
@@ -84,10 +89,13 @@ public class PotCounter : BaseCounter, IHasProgress
                     Debug.LogWarning("1！");
                     boilingTimer += Time.deltaTime;
 
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = boilingTimer / boilingReciepeSO.boilingTimerMax
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = boilingTimer / boilingReciepeSO.boilingTimerMax,
+                        }
+                    );
 
                     if (boilingTimer > boilingReciepeSO.boilingTimerMax)
                     {
@@ -96,12 +104,11 @@ public class PotCounter : BaseCounter, IHasProgress
                         KitchenObject.SpwanKitchenObject(boilingReciepeSO.output, this);
                         state = State.Boiled;
                         burnedTimer = 0f;
-                        burningReciepeSO = GetBurningSOWithInput(GetKitchenObject().GetKitchenObjectOS());
+                        burningReciepeSO = GetBurningSOWithInput(
+                            GetKitchenObject().GetKitchenObjectOS()
+                        );
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                        {
-                            state = state
-                        });
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
                         Clear();
                     }
@@ -110,10 +117,13 @@ public class PotCounter : BaseCounter, IHasProgress
                 case State.Boiled:
                     burnedTimer += Time.deltaTime;
 
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = burnedTimer / burningReciepeSO.burningTimerMax
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = burnedTimer / burningReciepeSO.burningTimerMax,
+                        }
+                    );
 
                     if (burnedTimer > burningReciepeSO.burningTimerMax)
                     {
@@ -122,15 +132,12 @@ public class PotCounter : BaseCounter, IHasProgress
                         KitchenObject.SpwanKitchenObject(burningReciepeSO.output, this);
                         state = State.Burned;
 
-                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                        {
-                            state = state
-                        });
+                        OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                        {
-                            progressNormalized = 0f
-                        });
+                        OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs { progressNormalized = 0f }
+                        );
                     }
                     break;
 
@@ -139,6 +146,7 @@ public class PotCounter : BaseCounter, IHasProgress
             }
         }
     }
+
     public override void Interact(Player player)
     {
         if (state == State.Idle)
@@ -153,8 +161,9 @@ public class PotCounter : BaseCounter, IHasProgress
                     //player carring something that can be boil
                     player.GetKitchenObject().SetKitchenObjectParent(this);
 
-                    BoilingReciepeSO _boilingReciepeSO = GetBoilingSOWithInput(GetKitchenObject().GetKitchenObjectOS());
-
+                    BoilingReciepeSO _boilingReciepeSO = GetBoilingSOWithInput(
+                        GetKitchenObject().GetKitchenObjectOS()
+                    );
 
                     if (boilingReciepeSO == null || cnt < boilingReciepeSO.input.Length)
                     {
@@ -165,17 +174,15 @@ public class PotCounter : BaseCounter, IHasProgress
                     state = State.Boiling;
                     boilingTimer = 0f;
 
-                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs
-                    {
-                        state = state
+                    OnStateChanged?.Invoke(this, new OnStateChangedEventArgs { state = state });
 
-                    });
-
-                    OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs
-                    {
-                        progressNormalized = boilingTimer / boilingReciepeSO.boilingTimerMax
-
-                    });
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs
+                        {
+                            progressNormalized = boilingTimer / boilingReciepeSO.boilingTimerMax,
+                        }
+                    );
                 }
             }
             else
@@ -189,10 +196,14 @@ public class PotCounter : BaseCounter, IHasProgress
             if (player.HasKitchenObject())
             {
                 //Player is carring something
-                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject))
+                if (
+                    player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)
+                )
                 {
                     //Player is holding a plate
-                    if (plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectOS()))
+                    if (
+                        plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectOS())
+                    )
                     {
                         GetKitchenObject().DestroySelf();
                     }
@@ -218,7 +229,6 @@ public class PotCounter : BaseCounter, IHasProgress
     private bool HasRecipeWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         return GetBoilingSOWithInput(inputKitchenObjectOS) != null;
-
     }
 
     private KitchenObjectOS GetOutputForInput(KitchenObjectOS inputKitchenObjectOS)
@@ -239,10 +249,14 @@ public class PotCounter : BaseCounter, IHasProgress
         // 已有唯一菜谱，判断加入食材是否存在并添加
         if (boilingReciepeSO != null)
         {
-            if (isObjGiven[boilingReciepeSO].ContainsKey(inputKitchenObjectOS)&&isObjGiven[boilingReciepeSO][inputKitchenObjectOS] == false)
+            if (
+                isObjGiven[boilingReciepeSO].ContainsKey(inputKitchenObjectOS)
+                && isObjGiven[boilingReciepeSO][inputKitchenObjectOS] == false
+            )
             {
                 isObjGiven[boilingReciepeSO][inputKitchenObjectOS] = true;
-                cnt++; inputKitchenObjectSOList.Append(inputKitchenObjectOS);
+                cnt++;
+                inputKitchenObjectSOList.Append(inputKitchenObjectOS);
             }
             if (!isObjGiven[boilingReciepeSO].ContainsKey(inputKitchenObjectOS))
             {
@@ -260,13 +274,15 @@ public class PotCounter : BaseCounter, IHasProgress
                 Debug.Log(inputKitchenObjectOS_Aready.name);
                 if (!isObjGiven[_boilingReciepeSO].ContainsKey(inputKitchenObjectOS_Aready))
                 {
-                    flag = false; break;
+                    flag = false;
+                    break;
                 }
             }
             if (flag && isObjGiven[_boilingReciepeSO].ContainsKey(inputKitchenObjectOS))
             {
                 isObjGiven[_boilingReciepeSO][inputKitchenObjectOS] = true;
-                cnt++; inputKitchenObjectSOList.Append(inputKitchenObjectOS);
+                cnt++;
+                inputKitchenObjectSOList.Append(inputKitchenObjectOS);
                 boilingReciepeSO = _boilingReciepeSO;
                 candidateCount++;
             }
@@ -283,12 +299,12 @@ public class PotCounter : BaseCounter, IHasProgress
             BoilingReciepeSO tmp = boilingReciepeSO;
             if (candidateCount > 1)
             {
-                Debug.LogError("有多个菜谱符合条件");
+                Debug.Log("有多个菜谱符合条件");
                 boilingReciepeSO = null;
             }
             else
             {
-                Debug.LogError("找到唯一菜谱符合条件");
+                Debug.Log("找到唯一菜谱符合条件");
             }
             return tmp;
         }
