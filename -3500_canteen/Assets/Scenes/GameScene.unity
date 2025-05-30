@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4439692, g: 0.4870652, b: 0.5389186, a: 1}
+  m_IndirectSpecularColor: {r: 0.44396946, g: 0.48706597, b: 0.53891975, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15919,7 +15919,6 @@ GameObject:
   - component: {fileID: 1382765933}
   - component: {fileID: 1382765935}
   - component: {fileID: 1382765934}
-  - component: {fileID: 1382765936}
   m_Layer: 5
   m_Name: RecipeTemplate (3)
   m_TagString: Untagged
@@ -16037,18 +16036,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!225 &1382765936
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1382765931}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 0
-  m_BlocksRaycasts: 0
-  m_IgnoreParentGroups: 0
 --- !u!1 &1394971935
 GameObject:
   m_ObjectHideFlags: 0
