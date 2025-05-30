@@ -99,9 +99,11 @@ public class Player : MonoBehaviour, IKithenObjectParent
         // 进行射线检测
         if (Physics.Raycast(ray, out RaycastHit raycastHit, interactDis, counterLayerMask))
         {
+            
             // 尝试获取击中物体的BaseCounter组件
             if (raycastHit.transform.TryGetComponent(out BaseCounter baseCounter))
             {
+                Debug.LogWarning("击中的物体有BaseCounter组件！");
                 // 如果BaseCounter组件不为当前选中的
                 if (baseCounter != selectedCounter)
                 {
@@ -119,7 +121,7 @@ public class Player : MonoBehaviour, IKithenObjectParent
         {
             // 射线未击中任何物体，设置为null
             SetSelectedCounter(null);
-            // Debug.LogWarning("射线未击中任何物体！");
+            Debug.LogWarning("射线未击中任何物体！");
         }
     }
 
@@ -131,12 +133,28 @@ public class Player : MonoBehaviour, IKithenObjectParent
             Debug.LogError("主相机未找到！");
             return;
         }
-
+        Debug.LogWarning("yi！");
         Ray Mouse = mainCamera.ScreenPointToRay(Input.mousePosition);
+        //Ray mouseRay = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(Mouse, out RaycastHit hitInfo))
         {
-            // 将角色的位置设置为鼠标点击的位置
-            transform.position = hitInfo.point;
+            // ------------------- 修改部分 -------------------
+            // 获取相机位置
+            Vector3 cameraPos = mainCamera.transform.position;
+            // 计算相机到碰撞点的向量
+            Vector3 direction = hitInfo.point - cameraPos;
+            // 设置靠近相机的比例（0.5表示中间位置，0-1之间调整，越小越靠近相机）
+            float cameraProximity = 0.9f;
+            // 插值计算新位置
+            Vector3 newPosition = cameraPos + direction * cameraProximity;
+            // ------------------- 修改部分 -------------------
+
+            transform.position = newPosition; // 应用新位置
+            isWalking = true;
+        }
+        else
+        {
+            isWalking = false;
         }
     }
 
