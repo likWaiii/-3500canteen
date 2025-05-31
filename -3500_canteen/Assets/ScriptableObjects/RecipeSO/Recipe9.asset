@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7dccc656cc1a9dc41a963bb0ef05aa8a, type: 3}
-  m_Name: Salad 1
+  m_Name: Recipe9
   m_EditorClassIdentifier: 
   kitchenObjectsOSList:
-  - {fileID: 11400000, guid: fe5585e9a0484e64f9a97b802ab90627, type: 2}
-  - {fileID: 11400000, guid: efafb5ad9ec5f6d43a4cab59f4564f48, type: 2}
+  - {fileID: 11400000, guid: cada50f6abef4b7458d9ed7e07869206, type: 2}
   - {fileID: 11400000, guid: 3c947a61639c7ea4eb261f1d184a5ae0, type: 2}
-  recipeName: Recipe5
-  maxTime: 30
+  - {fileID: 11400000, guid: 2ee8e84463ef4964ab898b2f4003a3a3, type: 2}
+  - {fileID: 11400000, guid: 8a93779fa12ac104dbfede86769f5fce, type: 2}
+  recipeName: "\u5957\u99109"
+  maxTime: 150
   calmSprite: {fileID: 21300000, guid: f51045a25148c09479e9f353f88423c1, type: 3}
   happySprite: {fileID: 21300000, guid: a90b6ae14e5adbc46886275486cdc850, type: 3}
   angrySprite: {fileID: 21300000, guid: be240d5c3ea232c4c8a4bdac3705a1b8, type: 3}
