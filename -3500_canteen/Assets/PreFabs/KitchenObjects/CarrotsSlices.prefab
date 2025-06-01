@@ -94,6 +94,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2231788070307829635, guid: 6cb31633060188b49b4af73224e02768, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4811aafe5210c9b4891a1224669f6709, type: 2}
     - target: {fileID: -1328539787231611138, guid: 6cb31633060188b49b4af73224e02768, type: 3}
       propertyPath: m_Name
       value: CarrotSlices

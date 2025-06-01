@@ -98,6 +98,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PotatoSlice
       objectReference: {fileID: 0}
+    - target: {fileID: 2015790727093129166, guid: 6cb31633060188b49b4af73224e02768, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d6e4c09ea32eb04c93a43dff3af6fc1, type: 2}
     - target: {fileID: 7449186462867391674, guid: 6cb31633060188b49b4af73224e02768, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.137
