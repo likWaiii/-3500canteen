@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44396946, g: 0.48706597, b: 0.53891975, a: 1}
+  m_IndirectSpecularColor: {r: 0.4439686, g: 0.48706472, b: 0.53891784, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6409,7 +6409,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 574, y: -79.42761}
+  m_AnchoredPosition: {x: 574, y: -79.427734}
   m_SizeDelta: {x: -1820, y: -1057.9373}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &603110626
@@ -17293,6 +17293,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 579212052650760967, guid: df3c24fcae928d84a9a9479c0766098b, type: 3}
+      propertyPath: frying2ReciepeSOArray.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 579212052650760967, guid: df3c24fcae928d84a9a9479c0766098b, type: 3}
       propertyPath: fryingReciepeSOArray.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 93a5ffbc4caccbf40895e4bc44f3ccde, type: 2}
@@ -17308,6 +17312,14 @@ PrefabInstance:
       propertyPath: burningReciepeSOArray.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: 74ca4bb4424167d4cb40d7fe9666ab40, type: 2}
+    - target: {fileID: 579212052650760967, guid: df3c24fcae928d84a9a9479c0766098b, type: 3}
+      propertyPath: frying2ReciepeSOArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 525000694d46c2b44b89f67e101fb376, type: 2}
+    - target: {fileID: 579212052650760967, guid: df3c24fcae928d84a9a9479c0766098b, type: 3}
+      propertyPath: frying2ReciepeSOArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 485f62cc702385c4ca75d261d650e300, type: 2}
     - target: {fileID: 717489110450717015, guid: df3c24fcae928d84a9a9479c0766098b, type: 3}
       propertyPath: m_Mesh
       value: 

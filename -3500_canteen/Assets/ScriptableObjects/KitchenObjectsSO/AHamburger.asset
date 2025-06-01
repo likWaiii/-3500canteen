@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
   m_Name: AHamburger
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5875697587690727071, guid: 11ffa5f031c823f48bc09d726639244d, type: 3}
+  prefab: {fileID: 5875697587690727071, guid: 2952649e05d3cb94482a552e26e774b5, type: 3}
   sprite: {fileID: 1432560709, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
   objectName: Hamburger
   value: 80

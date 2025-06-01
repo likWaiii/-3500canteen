@@ -20,7 +20,7 @@ public class StoveBurnWarningUI : MonoBehaviour
     )
     {
         float burnShowProgressAmount = .5f;
-        bool show = stoveCounter.IsFried() && e.progressNormalized >= burnShowProgressAmount;
+        bool show = (stoveCounter.IsFried() && e.progressNormalized >= burnShowProgressAmount) || (stoveCounter.IsFrying2() && !stoveCounter.HasTurned() && e.progressNormalized >= burnShowProgressAmount);
 
         if (show)
         {

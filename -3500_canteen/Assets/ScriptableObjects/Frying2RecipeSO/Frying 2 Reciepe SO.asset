@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae262cd86961c2045888dfc0c638bd68, type: 3}
   m_Name: Frying 2 Reciepe SO
   m_EditorClassIdentifier: 
-  input: {fileID: 11400000, guid: 33f0ba7e88e764144a75a7d4d58a132f, type: 2}
-  output: {fileID: 11400000, guid: 33f0ba7e88e764144a75a7d4d58a132f, type: 2}
+  input: {fileID: 11400000, guid: 07def81839f30424784e53a96f97d815, type: 2}
+  middle: {fileID: 11400000, guid: 33f0ba7e88e764144a75a7d4d58a132f, type: 2}
+  output: {fileID: 11400000, guid: c6861a4fd0cef7c4b96927108dfcb63d, type: 2}
   fryingTimerMax: 4

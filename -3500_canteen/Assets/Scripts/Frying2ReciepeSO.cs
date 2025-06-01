@@ -6,6 +6,7 @@ using UnityEngine;
 public class Frying2ReciepeSO : ScriptableObject
 {
     public KitchenObjectOS input;
+    public KitchenObjectOS middle;
     public KitchenObjectOS output;
 
     public float fryingTimerMax;
