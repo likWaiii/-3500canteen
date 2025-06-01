@@ -19,6 +19,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: efafb5ad9ec5f6d43a4cab59f4564f48, type: 2}
   recipeName: "\u5957\u991010"
   maxTime: 150
-  calmSprite: {fileID: 21300000, guid: f51045a25148c09479e9f353f88423c1, type: 3}
-  happySprite: {fileID: 21300000, guid: a90b6ae14e5adbc46886275486cdc850, type: 3}
-  angrySprite: {fileID: 21300000, guid: be240d5c3ea232c4c8a4bdac3705a1b8, type: 3}
+  calmSprite: {fileID: -1949084618, guid: d07409d938927cc4ead76bc0565ca5a9, type: 3}
+  happySprite: {fileID: -893231272, guid: 86e3efe0ba4626b45a1221343a97bd25, type: 3}
+  angrySprite: {fileID: -1014339417, guid: 185af8a9b82481848aa28b19941a809c, type: 3}
