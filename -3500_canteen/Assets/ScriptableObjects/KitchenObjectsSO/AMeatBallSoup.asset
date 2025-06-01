@@ -15,4 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 5875697587690727071, guid: 0e3bca4fbf028b44eb84725c9b1e0811, type: 3}
   sprite: {fileID: 1809426085, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
   objectName: MeatBallSoup
-  value: 200
+  value: 120

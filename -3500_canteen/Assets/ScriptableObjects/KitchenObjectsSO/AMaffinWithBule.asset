@@ -15,4 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 5875697587690727071, guid: 6b39c56dd8cd9d740bf7de0a4f244e52, type: 3}
   sprite: {fileID: -2029383309, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
   objectName: MaffinWithBule
-  value: 60
+  value: 80
