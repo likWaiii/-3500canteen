@@ -19,7 +19,6 @@ public class DrinksCounterVisual : MonoBehaviour
     {
         bool showVisual =
             e.state == DrinksCounter.State.Overflow;
-        particlesOnGameObject.transform.position = drinksCounter.getCup().transform.position; // …Ë÷√—ÃŒÌŒª÷√
         particlesOnGameObject.SetActive(showVisual); // —ÃŒÌ  
     }
 }

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ddc4542f5d102614781c4b7e839d24cd, type: 3}
-  m_Name: Soup1
+  m_Name: BreadSoup
   m_EditorClassIdentifier: 
   input:
   - {fileID: 11400000, guid: 377695d6ef12729478b7034f5c9f4a18, type: 2}
