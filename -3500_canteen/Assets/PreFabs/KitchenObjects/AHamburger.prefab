@@ -110,6 +110,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -112752135350207782, guid: 38e2de133dbbed644b9ac7e73a2ff0f4, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8209a8c241db7c0489f82b3f8eb577de, type: 2}
     - target: {fileID: 919132149155446097, guid: 38e2de133dbbed644b9ac7e73a2ff0f4, type: 3}
       propertyPath: m_Name
       value: hamburger (1)
