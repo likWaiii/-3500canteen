@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: MeatPattySliced
   m_EditorClassIdentifier: 
   prefab: {fileID: 1269569767325896964, guid: 7099b7afbc56a5849923f4c222ab6ec7, type: 3}
-  sprite: {fileID: 21300000, guid: f1f50c7ef90b19741b26f2040806cf56, type: 3}
+  sprite: {fileID: 21300000, guid: aa1bacc24dde76e47b2ec0dd4e82385b, type: 3}
   objectName: MeatPattySliced
+  value: 0
