@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
-  m_Name: Cups
+  m_Name: cup
   m_EditorClassIdentifier: 
-  prefab: {fileID: -8679921383154817045, guid: 8545ddbd58a8add41907acab8efbf33b, type: 3}
-  sprite: {fileID: -1210475658, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
-  objectName: Cups
-  value: 10
+  prefab: {fileID: 5875697587690727071, guid: 2c441bc86be92434297786510a08e6d9, type: 3}
+  sprite: {fileID: 851062239, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
+  objectName: cup
+  value: 60

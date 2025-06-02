@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45befa4d0e6c3854781c29da0d57bead, type: 3}
   m_Name: Drinks
   m_EditorClassIdentifier: 
-  input: {fileID: 11400000, guid: 29dd003be4b63264398356ed9635bbbf, type: 2}
+  input: {fileID: 11400000, guid: ed581ce71e873604389b00d6a574c85e, type: 2}
   output: {fileID: 11400000, guid: cada50f6abef4b7458d9ed7e07869206, type: 2}
   pouringTimerMax: 4

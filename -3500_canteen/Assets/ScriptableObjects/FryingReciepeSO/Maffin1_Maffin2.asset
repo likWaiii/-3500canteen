@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98807e73be9e4064ea265c194e8f28d5, type: 3}
   m_Name: Maffin1_Maffin2
   m_EditorClassIdentifier: 
-  input: {fileID: 11400000, guid: f4e9dda64b5f65a47ad7e537b4ca3a32, type: 2}
+  input: {fileID: 11400000, guid: 58dbda32e33a97049a117f7d0f9bd419, type: 2}
   output: {fileID: 11400000, guid: 74388abf4b923f24b92614ef2a5059ed, type: 2}
   fryingTimerMax: 5
