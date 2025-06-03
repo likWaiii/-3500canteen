@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 5875697587690727071, guid: 25afb63cbac17634aa4a4cd8d5578809, type: 3}
   sprite: {fileID: 21300000, guid: 77b28124b8bda494381c80bd5aa42c22, type: 3}
-  objectName: Maffin
+  objectName: MafinInBOX
   value: 2

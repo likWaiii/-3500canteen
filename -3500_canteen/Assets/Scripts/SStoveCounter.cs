@@ -204,9 +204,11 @@ public class SStoveCounter : BaseCounter, IHasProgress
             if (player.HasKitchenObject())
             {
                 //Player is Carrying Something
+                Debug.Log("Player is carrying: " + player.GetKitchenObject().GetKitchenObjectOS());
 
                 if (HasRecipeWithInput(player.GetKitchenObject().GetKitchenObjectOS()))
                 {
+                    Debug.Log("Player is carrying a valid KitchenObject for frying.");
                     //player carring something that can be fried
                     player.GetKitchenObject().SetKitchenObjectParent(this);
 
@@ -279,6 +281,7 @@ public class SStoveCounter : BaseCounter, IHasProgress
     private bool HasRecipeWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
         FryingReciepeSO fryingReciepeSO = GetFryingSOWithInput(inputKitchenObjectOS);
+        Debug.Log("FryingReciepeSO: " + fryingReciepeSO);
         return fryingReciepeSO != null;
     }
 
@@ -297,8 +300,10 @@ public class SStoveCounter : BaseCounter, IHasProgress
 
     private FryingReciepeSO GetFryingSOWithInput(KitchenObjectOS inputKitchenObjectOS)
     {
+        Debug.Log("GetFryingSOWithInput called with input: " + inputKitchenObjectOS);
         foreach (FryingReciepeSO fryingRecipeSO in fryingReciepeSOArray)
         {
+            Debug.Log("Checking fryingRecipeSO: " + fryingRecipeSO.input);
             if (fryingRecipeSO.input == inputKitchenObjectOS)
             {
                 return fryingRecipeSO;
