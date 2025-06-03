@@ -9625,6 +9625,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3372494765135245994, guid: ad8590a2d90f77d4a9a5554f7f000e85, type: 3}
+      propertyPath: m_Center.y
+      value: 1.33
+      objectReference: {fileID: 0}
     - target: {fileID: 4044668623210627322, guid: ad8590a2d90f77d4a9a5554f7f000e85, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.004
@@ -14808,7 +14812,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4525924881615339676, guid: 04062867509c7de47959b40b284a3009, type: 3}
       propertyPath: cutKitchenObjectOSArray.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4525924881615339676, guid: 04062867509c7de47959b40b284a3009, type: 3}
       propertyPath: cutKitchenObjectOSArray.Array.data[3]
@@ -14818,6 +14822,10 @@ PrefabInstance:
       propertyPath: cutKitchenObjectOSArray.Array.data[4]
       value: 
       objectReference: {fileID: 11400000, guid: 6740c1a0fbcb5b048b5896d83ab9c5c8, type: 2}
+    - target: {fileID: 4525924881615339676, guid: 04062867509c7de47959b40b284a3009, type: 3}
+      propertyPath: cutKitchenObjectOSArray.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 84a3c48b3065edf48bea5af915cab251, type: 2}
     - target: {fileID: 5480967255548352327, guid: 04062867509c7de47959b40b284a3009, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.14

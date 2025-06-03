@@ -17,4 +17,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1e6dbce86a9fe8d4986aa3fa8d1ab861, type: 2}
   - {fileID: 11400000, guid: 92b7b3ee2763f0740a2babf7ddda49d7, type: 2}
   output: {fileID: 11400000, guid: 2ee8e84463ef4964ab898b2f4003a3a3, type: 2}
-  boilingTimerMax: 10
+  boilingTimerMax: 15
