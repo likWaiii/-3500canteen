@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Salad
   m_EditorClassIdentifier: 
   input:
+  - {fileID: 11400000, guid: 1e6dbce86a9fe8d4986aa3fa8d1ab861, type: 2}
+  - {fileID: 11400000, guid: 377695d6ef12729478b7034f5c9f4a18, type: 2}
   - {fileID: 11400000, guid: 92b7b3ee2763f0740a2babf7ddda49d7, type: 2}
-  - {fileID: 11400000, guid: c13f798db0a262e4a8db49a8d3307b21, type: 2}
   output: {fileID: 11400000, guid: 3c947a61639c7ea4eb261f1d184a5ae0, type: 2}

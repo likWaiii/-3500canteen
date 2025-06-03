@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 156517195e3da304da670cc40ed051ec, type: 3}
   m_Name: BreadSlice
   m_EditorClassIdentifier: 
-  prefab: {fileID: 5875697587690727071, guid: 75fe779d02acdaf4b9428b2ef769ca89, type: 3}
+  prefab: {fileID: 5875697587690727071, guid: c170a802e36c8bb49b3dfedced442dce, type: 3}
   sprite: {fileID: 1351456732, guid: bf1b9fa7049e75d4d99f25305e8a1598, type: 3}
-  objectName: TomatoSlice
+  objectName: BreadSlice
   value: 0

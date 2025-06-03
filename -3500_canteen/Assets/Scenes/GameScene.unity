@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.14572951, g: 0.4184986, b: 0.42293024, a: 1}
+  m_IndirectSpecularColor: {r: 0.1457853, g: 0.4185064, b: 0.42289564, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -16445,6 +16445,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d8838fe39eba0643ba13575066745c3, type: 2}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
     - target: {fileID: 7562600622600791698, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
       propertyPath: m_Name
       value: SStoveCounter_PotRight1
@@ -18090,6 +18106,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SStoveCounter_PotRight2
       objectReference: {fileID: 0}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d8838fe39eba0643ba13575066745c3, type: 2}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
