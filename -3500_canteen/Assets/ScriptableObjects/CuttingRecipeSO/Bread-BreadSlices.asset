@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 086b10ea4db496d42b1f0015550882ad, type: 3}
-  m_Name: Bread-HalfBread
+  m_Name: Bread-BreadSlices
   m_EditorClassIdentifier: 
   input: {fileID: 11400000, guid: 756a2548d6744cf4cb2365655bbaa1fe, type: 2}
-  output: {fileID: 11400000, guid: f7c54550906b4d14d8a41eac063b5e17, type: 2}
+  output: {fileID: 11400000, guid: 3ddf1dcc3bf5a824f9321bc69e480e2b, type: 2}
   cuttingPogressMax: 3

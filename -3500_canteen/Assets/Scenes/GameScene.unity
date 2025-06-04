@@ -10954,9 +10954,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 312806624312012035, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.013
+      objectReference: {fileID: 0}
+    - target: {fileID: 312806624312012035, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.316
+      objectReference: {fileID: 0}
+    - target: {fileID: 312806624312012035, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.009
+      objectReference: {fileID: 0}
     - target: {fileID: 4022112793326562040, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
       propertyPath: m_Name
       value: ClearCounter (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4345416794130558878, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 7129434214153924126, guid: 1e36fe128daf6d84b8d7dc14572c1259, type: 3}
+    - target: {fileID: 6543267550573552739, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8639592117770137589, guid: ed5aa614f1bc86c4c939375ea7abbc41, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13268,15 +13288,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2938409870698226591, guid: 4697b7adab0ca25429c1f727e2f9cdd3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.506
+      value: -6.44
       objectReference: {fileID: 0}
     - target: {fileID: 2938409870698226591, guid: 4697b7adab0ca25429c1f727e2f9cdd3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.03
       objectReference: {fileID: 0}
     - target: {fileID: 2938409870698226591, guid: 4697b7adab0ca25429c1f727e2f9cdd3, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.672
+      value: 1.73
       objectReference: {fileID: 0}
     - target: {fileID: 2938409870698226591, guid: 4697b7adab0ca25429c1f727e2f9cdd3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16445,6 +16465,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d8838fe39eba0643ba13575066745c3, type: 2}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
+    - target: {fileID: 6041889322957216050, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
     - target: {fileID: 7562600622600791698, guid: 7b113c156a2548447a2257e955fdb164, type: 3}
       propertyPath: m_Name
       value: SStoveCounter_PotRight1
@@ -18090,6 +18126,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SStoveCounter_PotRight2
       objectReference: {fileID: 0}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8d8838fe39eba0643ba13575066745c3, type: 2}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
+    - target: {fileID: 8197243593090806454, guid: 3f513078edc6bf94f8bd106304705920, type: 3}
+      propertyPath: boilKitchenObjectOSArray.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 020a29fb3072eea4986dd7391b430782, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
