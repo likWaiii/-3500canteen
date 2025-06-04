@@ -5788,7 +5788,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0326561b39a16d645a54f04e68f94c82, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.69
+      value: 0.674
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0326561b39a16d645a54f04e68f94c82, type: 3}
       propertyPath: m_LocalPosition.z
@@ -18331,10 +18331,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1506684406}
     m_Modifications:
+    - target: {fileID: 2464614742433185638, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d221383789a8c949a2478e471f10597, type: 2}
+    - target: {fileID: 3250071319439686647, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d221383789a8c949a2478e471f10597, type: 2}
     - target: {fileID: 4183966288527540927, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
       propertyPath: m_Name
       value: ContainerCounter_BuleBerry
       objectReference: {fileID: 0}
+    - target: {fileID: 4399226224430510999, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d221383789a8c949a2478e471f10597, type: 2}
+    - target: {fileID: 5175324067743306041, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d221383789a8c949a2478e471f10597, type: 2}
     - target: {fileID: 8801434642178131890, guid: faabf9a419f78d34589a72e7d421dfaa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.83
@@ -18445,6 +18461,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1506684406}
     m_Modifications:
+    - target: {fileID: 1271511355439975777, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4451f1d21cd7474ba08c7d562a93a5d, type: 2}
+    - target: {fileID: 1889020056034976837, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4451f1d21cd7474ba08c7d562a93a5d, type: 2}
     - target: {fileID: 2275419853086922814, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.72
@@ -18485,10 +18509,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6250286031062667496, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4451f1d21cd7474ba08c7d562a93a5d, type: 2}
+    - target: {fileID: 6845887963270010121, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4451f1d21cd7474ba08c7d562a93a5d, type: 2}
     - target: {fileID: 6892617718321814835, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
       propertyPath: m_Name
       value: ContainerCounter_Maffin
       objectReference: {fileID: 0}
+    - target: {fileID: 8986697748729331286, guid: b7b79952ac0318c4ebfda877a4e43711, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f4451f1d21cd7474ba08c7d562a93a5d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
